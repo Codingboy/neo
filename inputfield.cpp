@@ -29,7 +29,6 @@ Wordpool* InputField::loadWordpool(QString& lesson)
     {
         qDebug() << "file not openable";
     }
-    unsigned int linecounter = 0;
     Wordpool* wp = new Wordpool(this->stats);
     while (true)
     {
@@ -41,15 +40,7 @@ Wordpool* InputField::loadWordpool(QString& lesson)
         QString str(bytes);
         str.remove("\n");
         str.remove("\r");
-        if (linecounter == 0)
-        {
-
-        }
-        else
-        {
-            wp->addWord(str);
-        }
-        linecounter++;
+        wp->addWord(str);
     }
     wp->finalise();
     in.close();
