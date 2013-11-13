@@ -11,7 +11,7 @@ class Statistic
 public:
     Statistic();
     void load(unsigned int number);
-    void save(unsigned int number);
+    void save(unsigned int number, unsigned int corrects, unsigned int mistakes, QString& lesson);
     void reportSuccess(const QChar& prev, const QChar& actual, const QChar& next);
     void reportMistake(const QChar& prev, const QChar& actual, const QChar& next);
     const QString& getRecommendedWord();

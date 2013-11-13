@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <QDir>
 #include <QDebug>
+#include "statisticwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,20 +23,30 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList files = dir.entryList();
     for (int i=0; i<files.size(); i++)
     {
-        qDebug() << files.at(i);
         QAction* action = new QAction(files.at(i), this);
         lessons.append(action);
         lesson->addAction(action);
     }
     QMenu* statistic = this->ui->menuBar->addMenu("&Statistic");
+    QAction* show = new QAction("&Show", this);
+    statistic->addAction(show);
+    QAction* reset = new QAction("&Reset", this);
+    statistic->addAction(reset);
     QMenu* about = this->ui->menuBar->addMenu("&About");
     this->stats = new Statistic();
-    ui->type->preinit(this->ui->display, stats, 300, this, ui->keyboard);
+    ui->type->preinit(this->ui->display, stats, 10, this, ui->keyboard);
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(show, SIGNAL(triggered()), this, SLOT(openStatistic()));
     for (int i=0; i<files.size(); i++)
     {
         connect(lessons.at(i), SIGNAL(triggered()), ui->type, SLOT(init()));
     }
+}
+
+void MainWindow::openStatistic()
+{
+    StatisticWindow* w = new StatisticWindow();
+    w->show();
 }
 
 MainWindow::~MainWindow()

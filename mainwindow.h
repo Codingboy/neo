@@ -20,6 +20,8 @@ public:
 private:
     Ui::MainWindow* ui;
     Statistic* stats;
+public slots:
+    void openStatistic();
 };
 
 #endif // MAINWINDOW_H

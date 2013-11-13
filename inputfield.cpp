@@ -65,8 +65,8 @@ void InputField::init()
     hits = 0;
     errorstate = false;
     QAction* action = (QAction*)QObject::sender();
-    QString lesson = action->iconText();
-    this->words = loadWordpool(lesson);
+    this->lesson = action->iconText();
+    this->words = loadWordpool(this->lesson);
     this->startTime = QTime::currentTime();
     display->clear();
     clear();
@@ -165,7 +165,7 @@ void InputField::keyPressEvent(QKeyEvent* e)
         {
             statsCounter = this->settings->value("statsCounter").toInt();
         }
-        this->stats->save(statsCounter);
+        this->stats->save(statsCounter, corrects, mistakes, this->lesson);
         statsCounter++;
         this->settings->setValue("statsCounter", QVariant(statsCounter));
         setReadOnly(true);

@@ -7,13 +7,23 @@
 #include <QList>
 #include <QDir>
 #include <QDebug>
+#include <QSettings>
 
 Statistic::Statistic()
 {
     this->sorted = new QList<QPair<QString, float> >();
     this->stats = new QMap<QString, QPair<unsigned int, unsigned int> >();
     qsrand(QTime::currentTime().msec());
-    load(0);
+    int statsCounter = 0;
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    if (settings.contains("statsCounter"))
+    {
+        statsCounter = settings.value("statsCounter").toInt();
+    }
+    for (int i=statsCounter-1; i>=0 && i+10>=statsCounter; i--)
+    {
+        load(i);
+    }
 }
 
 void Statistic::load(unsigned int number)
@@ -30,9 +40,15 @@ void Statistic::load(unsigned int number)
         qDebug() << "file \"" << path << "\" not openable";
         return;
     }
+    unsigned int lineCounter = 0;
     while (true)
     {
         QByteArray bytes = in.readLine();
+        if (lineCounter < 4)
+        {
+            lineCounter++;
+            continue;
+        }
         if (bytes.size() == 0)
         {
             break;
@@ -54,11 +70,12 @@ void Statistic::load(unsigned int number)
             mistakes += this->stats->value(key).second;
         }
         this->stats->insert(key, qMakePair(successes, mistakes));
+        lineCounter++;
     }
     in.close();
 }
 
-void Statistic::save(unsigned int number)
+void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mistakes, QString& lesson)
 {
     QString path = QString("stats")+QDir::separator()+QString::number(number, 10)+QString(".stats");
 	QFile out(path);
@@ -71,6 +88,10 @@ void Statistic::save(unsigned int number)
         qDebug() << "file \"" << path << "\" not openable";
         return;
     }
+    out.write(QString(QTime::currentTime().toString()+"\n").toLatin1());
+    out.write(QString(lesson+"\n").toLatin1());
+    out.write(QString(QString::number(corrects, 10)+"\n").toLatin1());
+    out.write(QString(QString::number(mistakes, 10)+"\n").toLatin1());
     QList<QString> keys = this->stats->keys();
     QString str;
     for (int i=0; i<keys.size(); i++)
@@ -105,7 +126,7 @@ void Statistic::save(unsigned int number)
 float expRand()
 {
     float x = qrand();
-    x /= INT_MAX;
+    x /= 32768-1;
     float ret = x*x*x;
     if (ret < 0)
     {

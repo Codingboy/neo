@@ -35,6 +35,7 @@ protected:
     QLabel* keyboard;
     Wordpool* loadWordpool(QString& lesson);
     QSettings* settings;
+    QString lesson;
     
 signals:
     
