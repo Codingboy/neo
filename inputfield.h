@@ -13,7 +13,7 @@ class InputField : public QTextEdit
     Q_OBJECT
 public:
     explicit InputField(QObject *parent = 0);
-    void init(QTextEdit* display, int lektion, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard);
+    void preinit(QTextEdit* display, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard);
     unsigned int mistakes;
     unsigned int corrects;
     unsigned int hits;
@@ -32,11 +32,12 @@ protected:
     QPixmap neo2;
     QPixmap neo3;
     QLabel* keyboard;
-    Wordpool* loadWordpool(int lektion);
+    Wordpool* loadWordpool(QString& lesson);
     
 signals:
     
 public slots:
+    void init();
     
 };
 

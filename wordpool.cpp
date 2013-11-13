@@ -13,11 +13,16 @@ void Wordpool::addWord(QString& word)
     }
 }
 
+void Wordpool::finalise()
+{
+    this->stats->setUsedWords(&(this->words));
+}
+
 void Wordpool::removeWord(QString& word)
 {
 }
 
 const QString& Wordpool::getRandomWord()
 {
-    return stats->getRecommendedWord(this->words);
+    return stats->getRecommendedWord();
 }

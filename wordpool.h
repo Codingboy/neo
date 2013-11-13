@@ -12,6 +12,7 @@ class Wordpool
         void addWord(QString& word);
         void removeWord(QString& word);
         const QString& getRandomWord();
+        void finalise();
     private:
         QList<QString> words;
         Statistic* stats;

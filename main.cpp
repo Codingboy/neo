@@ -7,8 +7,7 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    Statistic* stats = new Statistic();
-    MainWindow w(stats, 1);
+    MainWindow w;
     w.show();
     
     return app.exec();

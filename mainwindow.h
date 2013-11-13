@@ -14,11 +14,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit MainWindow(Statistic* stats, int lektion, QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
+    Statistic* stats;
 };
 
 #endif // MAINWINDOW_H
