@@ -19,6 +19,7 @@ InputField::InputField(QObject *parent) :
         hits = 0;
         mistakes = 0;
         errorstate = false;
+        this->settings = new QSettings("settings.ini", QSettings::IniFormat);
 }
 
 Wordpool* InputField::loadWordpool(QString& lesson)
@@ -159,19 +160,24 @@ void InputField::keyPressEvent(QKeyEvent* e)
     QTime t = this->startTime.addSecs(this->time);
     if (t <= QTime::currentTime())
     {
-        this->stats->save(0);
-        //TODO show evaluation
+        int statsCounter = 0;
+        if (this->settings->contains("statsCounter"))
+        {
+            statsCounter = this->settings->value("statsCounter").toInt();
+        }
+        this->stats->save(statsCounter);
+        statsCounter++;
+        this->settings->setValue("statsCounter", QVariant(statsCounter));
         setReadOnly(true);
         clear();
         display->clear();
         QString text;
-        text += "hits/minute:\t";
-        text += QString::number((float)(corrects+mistakes)/((float)(this->time)/60))+"\n";
-        text += "mistakes/100hits:\t";
-        text += QString::number((float)mistakes*100/(corrects+mistakes))+"\n";
+        text += QString::number((float)(corrects+mistakes)/((float)(this->time)/60))+" ";
+        text += "hits/minute\n";
+        text += QString::number((float)mistakes*100/(corrects+mistakes))+" ";
+        text += "mistakes/100hits\n";
         display->setText(text);
     }
-    //printf("%s\n", toStdString().c_str());
 }
 
 void InputField::showText()

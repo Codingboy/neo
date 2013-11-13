@@ -7,6 +7,7 @@
 #include <QTime>
 #include <QMainWindow>
 #include <QLabel>
+#include <QSettings>
 
 class InputField : public QTextEdit
 {
@@ -33,6 +34,7 @@ protected:
     QPixmap neo3;
     QLabel* keyboard;
     Wordpool* loadWordpool(QString& lesson);
+    QSettings* settings;
     
 signals:
     
