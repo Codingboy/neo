@@ -17,11 +17,6 @@ void Wordpool::removeWord(QString& word)
 {
 }
 
-QList<QString>& Wordpool::getWords()
-{
-    return this->words;
-}
-
 const QString& Wordpool::getRandomWord()
 {
     return stats->getRecommendedWord(this->words);

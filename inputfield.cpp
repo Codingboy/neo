@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <QKeyEvent>
 #include <QFile>
+#include <QDebug>
 
 InputField::InputField(QObject *parent) :
     QTextEdit((QWidget*)parent),
@@ -19,10 +20,12 @@ InputField::InputField(QObject *parent) :
 
 Wordpool* InputField::loadWordpool(int lektion)
 {
-    QString path = "./wp/"+QString(lektion)+".wp";
+    QString path = "C:\\Users\\bla\\Desktop\\neo\\wp\\"+QString::number(lektion, 10)+".wp";
     QFile in(path);
-    in.open(QIODevice::ReadOnly);
-
+    if (!in.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "file not openable";
+    }
     unsigned int linecounter = 0;
     Wordpool* wp = new Wordpool(this->stats);
     while (true)
@@ -50,8 +53,8 @@ Wordpool* InputField::loadWordpool(int lektion)
 void InputField::init(QTextEdit* display, int lektion, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard)
 {
     this->display = display;
-    this->words = loadWordpool(lektion);
     this->stats = stats;
+    this->words = loadWordpool(lektion);
     this->time = time;
     this->mw = mw;
     this->keyboard = keyboard;
@@ -134,7 +137,7 @@ void InputField::keyPressEvent(QKeyEvent* e)
     QTime t = this->startTime.addSecs(this->time);
     if (t <= QTime::currentTime())
     {
-        this->stats->save();
+        this->stats->save(0);
         //TODO show evaluation
         setReadOnly(true);
         //mw->close();
@@ -146,6 +149,7 @@ void InputField::showText()
 {
     if (this->display->toPlainText().length() == 0)
     {
+        qDebug() << this->words->getRandomWord();
         this->display->insertPlainText(this->words->getRandomWord());
         this->display->insertPlainText(" ");
         this->display->insertPlainText(this->words->getRandomWord());

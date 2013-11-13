@@ -10,15 +10,16 @@ class Statistic
 {
 public:
     Statistic();
-    void load();
-    void save();
+    void load(unsigned int number);
+    void save(unsigned int number);
     void reportSuccess(const QChar& prev, const QChar& actual, const QChar& next);
     void reportMistake(const QChar& prev, const QChar& actual, const QChar& next);
-    const QString& getRecommendedWord(QList<QString> words);
+    const QString& getRecommendedWord(QList<QString>& words);
 private:
-    QMap<QString, QPair<unsigned int, unsigned int> > stats;//first=successes, second=mistakes
-    QList<QPair<QString, float> > sorted;//sorted by value
+    QMap<QString, QPair<unsigned int, unsigned int> >* stats;//first=successes, second=mistakes
+    QList<QPair<QString, float> >* sorted;//sorted by value
     void sort();
+    int bla;
 };
 
 #endif // STATISTIC_H

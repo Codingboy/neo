@@ -8,7 +8,7 @@ MainWindow::MainWindow(Statistic* stats, int lektion, QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->type->init(this->ui->display, lektion, stats, 300, this, ui->keyboard);
+    ui->type->init(this->ui->display, lektion, stats, 3, this, ui->keyboard);
 }
 
 MainWindow::~MainWindow()
