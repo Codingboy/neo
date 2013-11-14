@@ -22,6 +22,7 @@ private:
     Statistic* stats;
 public slots:
     void openStatistic();
+    void resetStatistic();
 };
 
 #endif // MAINWINDOW_H

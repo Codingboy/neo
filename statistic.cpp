@@ -8,12 +8,19 @@
 #include <QDir>
 #include <QDebug>
 #include <QSettings>
+#include <QDate>
 
 Statistic::Statistic()
 {
     this->sorted = new QList<QPair<QString, float> >();
     this->stats = new QMap<QString, QPair<unsigned int, unsigned int> >();
     qsrand(QTime::currentTime().msec());
+}
+
+void Statistic::load()
+{
+    this->sorted->clear();
+    this->stats->clear();
     int statsCounter = 0;
     QSettings settings("settings.ini", QSettings::IniFormat);
     if (settings.contains("statsCounter"))
@@ -64,12 +71,15 @@ void Statistic::load(unsigned int number)
         {
             key += QChar(sl.at(i).toInt());
         }
-        if (this->stats->contains(key))
+        if (key.length() > 1)
         {
-            successes += this->stats->value(key).first;
-            mistakes += this->stats->value(key).second;
+            if (this->stats->contains(key))
+            {
+                successes += this->stats->value(key).first;
+                mistakes += this->stats->value(key).second;
+            }
+            this->stats->insert(key, qMakePair(successes, mistakes));
         }
-        this->stats->insert(key, qMakePair(successes, mistakes));
         lineCounter++;
     }
     in.close();
@@ -88,7 +98,7 @@ void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mi
         qDebug() << "file \"" << path << "\" not openable";
         return;
     }
-    out.write(QString(QTime::currentTime().toString()+"\n").toLatin1());
+    out.write(QString(QDate::currentDate().toString()+"\n").toLatin1());
     out.write(QString(lesson+"\n").toLatin1());
     out.write(QString(QString::number(corrects, 10)+"\n").toLatin1());
     out.write(QString(QString::number(mistakes, 10)+"\n").toLatin1());
@@ -126,7 +136,12 @@ void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mi
 float expRand()
 {
     float x = qrand();
+#ifdef __linux__
+    x /= INT_MAX;
+#endif
+#ifdef _WIN32
     x /= 32768-1;
+#endif
     float ret = x*x*x;
     if (ret < 0)
     {

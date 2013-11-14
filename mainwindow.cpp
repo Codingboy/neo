@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QDebug>
 #include "statisticwindow.h"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->type->preinit(this->ui->display, stats, 10, this, ui->keyboard);
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(show, SIGNAL(triggered()), this, SLOT(openStatistic()));
+    connect(reset, SIGNAL(triggered()), this, SLOT(resetStatistic()));
     for (int i=0; i<files.size(); i++)
     {
         connect(lessons.at(i), SIGNAL(triggered()), ui->type, SLOT(init()));
@@ -47,6 +49,28 @@ void MainWindow::openStatistic()
 {
     StatisticWindow* w = new StatisticWindow();
     w->show();
+}
+
+void MainWindow::resetStatistic()
+{
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Reset Statistic");
+    msgBox.setText("Do you really want to reset the complete statistic?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    if(msgBox.exec() == QMessageBox::Yes)
+    {
+        QDir dir("wp");
+        dir.setFilter(QDir::Files);
+        dir.setSorting(QDir::Name);
+        dir.setNameFilters(QStringList("*.wp"));
+        QStringList files = dir.entryList();
+        for (int i=0; i<files.size(); i++)
+        {
+            QFile del(dir.absoluteFilePath(files.at(i)));
+            del.remove();
+        }
+    }
 }
 
 MainWindow::~MainWindow()

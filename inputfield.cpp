@@ -64,6 +64,7 @@ void InputField::init()
     corrects = 0;
     hits = 0;
     errorstate = false;
+    this->stats->load();
     QAction* action = (QAction*)QObject::sender();
     this->lesson = action->iconText();
     this->words = loadWordpool(this->lesson);
