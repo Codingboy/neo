@@ -197,6 +197,14 @@ StatisticWindow::StatisticWindow(QWidget *parent) :
         scene2->addLine(i*5, 200-points.at(i), (i+1)*5, 200-points.at(i+1));
     }
     this->ui->plot2->setScene(scene2);
+
+    for (int i=0; i<8; i++)
+    {
+        if (fingerStats.contains(i))
+        {
+            float f = (float)fingerStats.value(i).second*100 / (fingerStats.value(i).second+fingerStats.value(i).first);
+        }
+    }
 }
 
 int mapCharToFinger(char c)
