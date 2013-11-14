@@ -23,6 +23,7 @@ private:
 public slots:
     void openStatistic();
     void resetStatistic();
+    void showAbout();
 };
 
 #endif // MAINWINDOW_H

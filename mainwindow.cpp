@@ -33,12 +33,15 @@ MainWindow::MainWindow(QWidget *parent) :
     statistic->addAction(show);
     QAction* reset = new QAction("&Reset", this);
     statistic->addAction(reset);
-    QMenu* about = this->ui->menuBar->addMenu("&About");
+    QMenu* aboutMenu = this->ui->menuBar->addMenu("&About");
+    QAction* aboutAction = new QAction("&About", this);
+    aboutMenu->addAction(aboutAction);
     this->stats = new Statistic();
     ui->type->preinit(this->ui->display, stats, 10, this, ui->keyboard);
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(show, SIGNAL(triggered()), this, SLOT(openStatistic()));
     connect(reset, SIGNAL(triggered()), this, SLOT(resetStatistic()));
+    connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAbout()));
     for (int i=0; i<files.size(); i++)
     {
         connect(lessons.at(i), SIGNAL(triggered()), ui->type, SLOT(init()));
@@ -63,7 +66,7 @@ void MainWindow::resetStatistic()
         QDir dir("wp");
         dir.setFilter(QDir::Files);
         dir.setSorting(QDir::Name);
-        dir.setNameFilters(QStringList("*.wp"));
+        dir.setNameFilters(QStringList("*.stats"));
         QStringList files = dir.entryList();
         for (int i=0; i<files.size(); i++)
         {
@@ -71,6 +74,11 @@ void MainWindow::resetStatistic()
             del.remove();
         }
     }
+}
+
+void MainWindow::showAbout()
+{
+    QMessageBox::about(this, "About", "Author:\tDaniel Tkocz\nContact:\tdaniel.tkocz@gmx.de\nLicense:\tBSD 2-Clause\n\ninspired by:\n\thttps://online.tipp10.com\n\thttp://neo-layout.org");
 }
 
 MainWindow::~MainWindow()
