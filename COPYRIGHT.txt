@@ -1,2 +1,7 @@
 Copyright (c) 2013 Daniel Tkocz
 This work is licensed under the BSD 2-Clause License. To view this license, open LICENSE.txt.
+
+I do not own copyright of some files:
+Sounds are from http://www.soundjay.com.
+Keyboard layout images are from http://neo-layout.org.
+Wordbooklists are from https://online.tipp10.com.

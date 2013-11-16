@@ -8,6 +8,7 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QSettings>
+#include <QSound>
 
 class InputField : public QTextEdit
 {
@@ -36,6 +37,7 @@ protected:
     Wordpool* loadWordpool(QString& lesson);
     QSettings* settings;
     QString lesson;
+    QSound* sound;
     
 signals:
     

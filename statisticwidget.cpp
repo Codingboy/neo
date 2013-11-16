@@ -1,4 +1,5 @@
-#include "statisticwindow.h"
+#include "statisticwidget.h"
+#include "ui_statisticwidget.h"
 #include <QGraphicsScene>
 #include <QList>
 #include <QSettings>
@@ -10,9 +11,9 @@
 
 int mapCharToFinger(char c);
 
-StatisticWindow::StatisticWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::StatisticWindow)
+StatisticWidget::StatisticWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::StatisticWidget)
 {
     ui->setupUi(this);
     QList<unsigned int> corrects;
@@ -203,6 +204,67 @@ StatisticWindow::StatisticWindow(QWidget *parent) :
         if (fingerStats.contains(i))
         {
             float f = (float)fingerStats.value(i).second*100 / (fingerStats.value(i).second+fingerStats.value(i).first);
+            char tmp[16];
+            sprintf(tmp, "%.1f %%", f);
+            QString str = QString(tmp);
+            switch (i)
+            {
+                case 0:
+                    this->ui->finger0->setText(str);
+                    break;
+                case 1:
+                    this->ui->finger1->setText(str);
+                    break;
+                case 2:
+                    this->ui->finger2->setText(str);
+                    break;
+                case 3:
+                    this->ui->finger3->setText(str);
+                    break;
+                case 4:
+                    this->ui->finger4->setText(str);
+                    break;
+                case 5:
+                    this->ui->finger5->setText(str);
+                    break;
+                case 6:
+                    this->ui->finger6->setText(str);
+                    break;
+                case 7:
+                    this->ui->finger7->setText(str);
+                    break;
+            }
+        }
+        else
+        {
+
+            switch (i)
+            {
+                case 0:
+                    this->ui->finger0->setText("0.0 %");
+                    break;
+                case 1:
+                    this->ui->finger1->setText("0.0 %");
+                    break;
+                case 2:
+                    this->ui->finger2->setText("0.0 %");
+                    break;
+                case 3:
+                    this->ui->finger3->setText("0.0 %");
+                    break;
+                case 4:
+                    this->ui->finger4->setText("0.0 %");
+                    break;
+                case 5:
+                    this->ui->finger5->setText("0.0 %");
+                    break;
+                case 6:
+                    this->ui->finger6->setText("0.0 %");
+                    break;
+                case 7:
+                    this->ui->finger7->setText("0.0 %");
+                    break;
+            }
         }
     }
 }

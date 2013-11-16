@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia
 
 TARGET = neo
 TEMPLATE = app
@@ -14,8 +14,8 @@ TEMPLATE = app
 
 # Input
 HEADERS += inputfield.h mainwindow.h statistic.h wordpool.h \
-    statisticwindow.h
+    statisticwidget.h
 FORMS += mainwindow.ui \
-    statisticwindow.ui
+    statisticwidget.ui
 SOURCES += inputfield.cpp main.cpp mainwindow.cpp statistic.cpp wordpool.cpp \
-    statisticwindow.cpp
+    statisticwidget.cpp

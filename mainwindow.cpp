@@ -4,8 +4,9 @@
 #include <cstdio>
 #include <QDir>
 #include <QDebug>
-#include "statisticwindow.h"
+#include "statisticwidget.h"
 #include <QMessageBox>
+#include <QFrame>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction* aboutAction = new QAction("&About", this);
     aboutMenu->addAction(aboutAction);
     this->stats = new Statistic();
-    ui->type->preinit(this->ui->display, stats, 10, this, ui->keyboard);
+    ui->type->preinit(this->ui->display, stats, 300, this, ui->keyboard);
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(show, SIGNAL(triggered()), this, SLOT(openStatistic()));
     connect(reset, SIGNAL(triggered()), this, SLOT(resetStatistic()));
@@ -50,8 +51,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::openStatistic()
 {
-    StatisticWindow* w = new StatisticWindow();
-    w->show();
+    QFrame* f = new QFrame();
+    StatisticWidget* w = new StatisticWidget(f);
+    f->setWindowTitle("Statistic");
+    f->setMinimumSize(w->size());
+    f->show();
 }
 
 void MainWindow::resetStatistic()

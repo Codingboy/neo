@@ -14,12 +14,25 @@ InputField::InputField(QObject *parent) :
     neo2(QString("graphics")+QDir::separator()+QString("neo2.png")),
     neo3(QString("graphics")+QDir::separator()+QString("neo3.png"))
 {
-        display = NULL;
-        corrects = 0;
-        hits = 0;
-        mistakes = 0;
-        errorstate = false;
-        this->settings = new QSettings("settings.ini", QSettings::IniFormat);
+    display = NULL;
+    corrects = 0;
+    hits = 0;
+    mistakes = 0;
+    errorstate = false;
+    this->settings = new QSettings("settings.ini", QSettings::IniFormat);
+    if (!this->settings->contains("statsCounter"))
+    {
+        this->settings->setValue("statsCounter", 0);
+    }
+    if (!this->settings->contains("blockOnError"))
+    {
+        this->settings->setValue("blockOnError", true);
+    }
+    if (!this->settings->contains("playErrorSound"))
+    {
+        this->settings->setValue("playErrorSound", true);
+    }
+    sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));
 }
 
 Wordpool* InputField::loadWordpool(QString& lesson)
@@ -77,10 +90,6 @@ void InputField::init()
 
 void InputField::keyReleaseEvent(QKeyEvent *e)
 {
-    if (isReadOnly())
-    {
-        return;
-    }
     if (e->modifiers() & Qt::ShiftModifier)
     {
         keyboard->setPixmap(neo2);
@@ -88,16 +97,16 @@ void InputField::keyReleaseEvent(QKeyEvent *e)
     else
     {
         keyboard->setPixmap(neo1);
+    }
+    if (isReadOnly())
+    {
+        return;
     }
     QTextEdit::keyPressEvent(e);
 }
 
 void InputField::keyPressEvent(QKeyEvent* e)
 {
-    if (isReadOnly())
-    {
-        return;
-    }
     if (e->modifiers() & Qt::ShiftModifier)
     {
         keyboard->setPixmap(neo2);
@@ -105,6 +114,10 @@ void InputField::keyPressEvent(QKeyEvent* e)
     else
     {
         keyboard->setPixmap(neo1);
+    }
+    if (isReadOnly())
+    {
+        return;
     }
     if (e->key() == Qt::Key_Backspace || e->key() == Qt::Key_Delete || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right)
     {
@@ -134,6 +147,31 @@ void InputField::keyPressEvent(QKeyEvent* e)
                 format.setFontPointSize(14);
                 cursor.setCharFormat(format);
                 cursor.insertText(key);
+                this->display->clear();
+                QTextCursor cursor2(this->display->textCursor());
+                QTextCharFormat format2;
+                format2.setBackground(QBrush(QColor("white")));
+                format2.setForeground(QBrush(QColor("black")));
+                format2.setFontWeight(QFont::Normal);
+                format2.setFontPointSize(14);
+                cursor2.setCharFormat(format2);
+                cursor2.insertText(typedText);
+                QTextCursor cursor3(this->display->textCursor());
+                QTextCharFormat format3;
+                format3.setBackground(QBrush(QColor("white")));
+                format3.setForeground(QBrush(QColor("black")));
+                format3.setFontWeight(QFont::Bold);
+                format3.setFontPointSize(20);
+                cursor3.setCharFormat(format3);
+                cursor3.insertText(displayText.left(typedText.length()+1).right(1));
+                QTextCursor cursor4(this->display->textCursor());
+                QTextCharFormat format4;
+                format4.setBackground(QBrush(QColor("white")));
+                format4.setForeground(QBrush(QColor("black")));
+                format4.setFontWeight(QFont::Normal);
+                format4.setFontPointSize(14);
+                cursor4.setCharFormat(format4);
+                cursor4.insertText(displayText.right(displayText.length()-typedText.length()-1));
                 if (e->key() == Qt::Key_Return)
                 {
                     showText();
@@ -141,31 +179,33 @@ void InputField::keyPressEvent(QKeyEvent* e)
             }
             else
             {
-                if (!errorstate)//protect from followed mistakes
+                if (this->settings->value("playErrorSound").toBool())
                 {
-                    mistakes++;
-                    errorstate = true;
-                    stats->reportMistake(displayText.at(typedText.length()-1), displayText.at(typedText.length()), displayText.at(typedText.length()+1));
+                    this->sound->play();
                 }
-                QTextCursor cursor(textCursor());
-                QTextCharFormat format;
-                format.setBackground(QBrush(QColor("red")));
-                format.setForeground(QBrush(QColor("black")));
-                format.setFontPointSize(14);
-                cursor.setCharFormat(format);
-                cursor.insertText(key);
+                if (!this->settings->value("blockOnError").toBool())
+                {
+                    if (!errorstate)//protect from followed mistakes
+                    {
+                        mistakes++;
+                        errorstate = true;
+                        stats->reportMistake(displayText.at(typedText.length()-1), displayText.at(typedText.length()), displayText.at(typedText.length()+1));
+                    }
+                    QTextCursor cursor(textCursor());
+                    QTextCharFormat format;
+                    format.setBackground(QBrush(QColor("red")));
+                    format.setForeground(QBrush(QColor("black")));
+                    format.setFontPointSize(14);
+                    cursor.setCharFormat(format);
+                    cursor.insertText(key);
+                }
             }
-            printf("%u %u %c\n", corrects, mistakes, (char)e->key());
         }
     }
     QTime t = this->startTime.addSecs(this->time);
     if (t <= QTime::currentTime())
     {
-        int statsCounter = 0;
-        if (this->settings->contains("statsCounter"))
-        {
-            statsCounter = this->settings->value("statsCounter").toInt();
-        }
+        int statsCounter = this->settings->value("statsCounter").toInt();
         this->stats->save(statsCounter, corrects, mistakes, this->lesson);
         statsCounter++;
         this->settings->setValue("statsCounter", QVariant(statsCounter));
@@ -187,24 +227,37 @@ void InputField::showText()
     {
         QTextCursor cursor(this->display->textCursor());
         QTextCharFormat format;
-        format.setFontPointSize(14);
+        format.setFontWeight(QFont::Bold);
+        format.setFontPointSize(20);
+        format.setBackground(QBrush(QColor("white")));
+        format.setForeground(QBrush(QColor("black")));
         cursor.setCharFormat(format);
-        cursor.insertText(this->words->getRandomWord());
-        cursor.insertText(" ");
-        cursor.insertText(this->words->getRandomWord());
-        cursor.insertText(" ");
-        cursor.insertText(this->words->getRandomWord());
-        cursor.insertText(" ");
-        cursor.insertText(this->words->getRandomWord());
-        cursor.insertText("\n");
-        cursor.insertText(this->words->getRandomWord());
-        cursor.insertText(" ");
-        cursor.insertText(this->words->getRandomWord());
-        cursor.insertText(" ");
-        cursor.insertText(this->words->getRandomWord());
-        cursor.insertText(" ");
-        cursor.insertText(this->words->getRandomWord());
-        cursor.insertText("\n");
+        QString word = this->words->getRandomWord();
+        cursor.insertText(word.left(1));
+
+        QTextCursor cursor2(this->display->textCursor());
+        QTextCharFormat format2;
+        format2.setFontWeight(QFont::Normal);
+        format2.setFontPointSize(14);
+        format2.setBackground(QBrush(QColor("white")));
+        format2.setForeground(QBrush(QColor("black")));
+        cursor2.setCharFormat(format2);
+        cursor2.insertText(word.right(word.length()-1));
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText("\n");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText("\n");
     }
     else
     {
@@ -230,17 +283,28 @@ void InputField::showText()
         this->display->clear();
         QTextCursor cursor(this->display->textCursor());
         QTextCharFormat format;
-        format.setFontPointSize(14);
+        format.setFontWeight(QFont::Bold);
+        format.setFontPointSize(20);
+        format.setBackground(QBrush(QColor("white")));
+        format.setForeground(QBrush(QColor("black")));
         cursor.setCharFormat(format);
-        cursor.insertText(last);
-        cursor.insertText(words->getRandomWord());
-        cursor.insertText(" ");
-        cursor.insertText(words->getRandomWord());
-        cursor.insertText(" ");
-        cursor.insertText(words->getRandomWord());
-        cursor.insertText(" ");
-        cursor.insertText(words->getRandomWord());
-        cursor.insertText("\n");
+        cursor.insertText(last.left(1));
+        QTextCursor cursor2(this->display->textCursor());
+        QTextCharFormat format2;
+        format2.setFontWeight(QFont::Normal);
+        format2.setFontPointSize(14);
+        format2.setBackground(QBrush(QColor("white")));
+        format2.setForeground(QBrush(QColor("black")));
+        cursor2.setCharFormat(format2);
+        cursor2.insertText(last.right(last.length()-1));
+        cursor2.insertText(words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(words->getRandomWord());
+        cursor2.insertText("\n");
         clear();
     }
 }
