@@ -9,12 +9,14 @@
 #include <QLabel>
 #include <QSettings>
 #include <QSound>
+#include <QProcess>
 
 class InputField : public QTextEdit
 {
     Q_OBJECT
 public:
     explicit InputField(QObject *parent = 0);
+    ~InputField();
     void preinit(QTextEdit* display, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard);
     unsigned int mistakes;
     unsigned int corrects;
@@ -38,6 +40,9 @@ protected:
     QSettings* settings;
     QString lesson;
     QSound* sound;
+#ifdef _WIN32
+    QProcess* neo20;
+#endif
     
 signals:
     

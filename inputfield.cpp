@@ -7,13 +7,32 @@
 #include <QTimer>
 #include <QAction>
 
+InputField::~InputField()
+{
+#ifdef _WIN32
+    this->neo20->kill();
+#endif
+    delete this->neo20;
+    delete this->settings;
+    delete this->sound;
+    if (this->words == NULL)
+    {
+        delete this->words;
+    }
+}
+
 InputField::InputField(QObject *parent) :
     QTextEdit((QWidget*)parent),
     startTime(QTime::currentTime()),
     neo1(QString("graphics")+QDir::separator()+QString("neo1.png")),
     neo2(QString("graphics")+QDir::separator()+QString("neo2.png")),
-    neo3(QString("graphics")+QDir::separator()+QString("neo3.png"))
+    neo3(QString("graphics")+QDir::separator()+QString("neo3.png")),
+    words(NULL)
 {
+#ifdef _WIN32
+    this->neo20 = new QProcess();
+    this->neo20->start(QString("programs")+QDir::separator()+QString("neo20.exe"));
+#endif
     display = NULL;
     corrects = 0;
     hits = 0;

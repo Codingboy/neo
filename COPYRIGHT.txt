@@ -5,3 +5,5 @@ I do not own copyright of some files:
 Sounds are from http://www.soundjay.com.
 Keyboard layout images are from http://neo-layout.org.
 Wordbooklists are from https://online.tipp10.com.
+neo20.exe is from http://neo-layout.org.
+All .dll's are from http://qt-project.org.
