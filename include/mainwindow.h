@@ -24,6 +24,8 @@ public slots:
     void openStatistic();
     void resetStatistic();
     void showAbout();
+    void showSettings();
+    void resetSettings();
 };
 
 #endif // MAINWINDOW_H

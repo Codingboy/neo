@@ -97,6 +97,7 @@ void InputField::preinit(QTextEdit* display, Statistic* stats, unsigned int time
     this->time = time;
     this->mw = mw;
     this->keyboard = keyboard;
+    this->keyboard->setPixmap(neo1);
     setReadOnly(true);
 }
 
@@ -154,6 +155,8 @@ void InputField::keyPressEvent(QKeyEvent* e)
     }
     else
     {
+        this->fontSize = this->settings->value("fontSize").toInt();
+        this->fontBoldSize = this->settings->value("fontBoldSize").toInt();
         QString key = e->text();
         if (key != QString(""))
         {

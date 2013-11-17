@@ -11,11 +11,15 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia
 TARGET = neo
 TEMPLATE = app
 
+INCLUDEPATH = include
 
 # Input
 HEADERS += include/inputfield.h include/mainwindow.h include/statistic.h include/wordpool.h \
-    include/statisticwidget.h
+    include/statisticwidget.h \
+    include/settingswidget.h
 FORMS += form/mainwindow.ui \
-    form/statisticwidget.ui
+    form/statisticwidget.ui \
+    form/settingswidget.ui
 SOURCES += src/inputfield.cpp src/main.cpp src/mainwindow.cpp src/statistic.cpp src/wordpool.cpp \
-    src/statisticwidget.cpp
+    src/statisticwidget.cpp \
+    src/settingswidget.cpp

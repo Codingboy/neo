@@ -7,6 +7,7 @@
 #include "statisticwidget.h"
 #include <QMessageBox>
 #include <QFrame>
+#include "settingswidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,6 +35,11 @@ MainWindow::MainWindow(QWidget *parent) :
     statistic->addAction(show);
     QAction* reset = new QAction("&Reset", this);
     statistic->addAction(reset);
+    QMenu* settingsMenu = this->ui->menuBar->addMenu("&Settings");
+    QAction* settingsAction = new QAction("&Edit", this);
+    settingsMenu->addAction(settingsAction);
+    QAction* resetSettingsAction = new QAction("&Reset", this);
+    settingsMenu->addAction(resetSettingsAction);
     QMenu* aboutMenu = this->ui->menuBar->addMenu("&About");
     QAction* aboutAction = new QAction("&About", this);
     aboutMenu->addAction(aboutAction);
@@ -43,10 +49,21 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(show, SIGNAL(triggered()), this, SLOT(openStatistic()));
     connect(reset, SIGNAL(triggered()), this, SLOT(resetStatistic()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAbout()));
+    connect(settingsAction, SIGNAL(triggered()), this, SLOT(showSettings()));
+    connect(resetSettingsAction, SIGNAL(triggered()), this, SLOT(resetSettings()));
     for (int i=0; i<files.size(); i++)
     {
         connect(lessons.at(i), SIGNAL(triggered()), ui->type, SLOT(init()));
     }
+}
+
+void MainWindow::showSettings()
+{
+    QFrame* f = new QFrame();
+    SettingsWidget* w = new SettingsWidget(f);
+    f->setWindowTitle("Settings");
+    f->setMinimumSize(w->size());
+    f->show();
 }
 
 void MainWindow::openStatistic()
@@ -88,4 +105,13 @@ void MainWindow::showAbout()
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::resetSettings()
+{
+    QSettings s("settings.ini", QSettings::IniFormat);
+    s.setValue("blockOnError", true);
+    s.setValue("playErrorSound", true);
+    s.setValue("fontSize", 12);
+    s.setValue("fontBoldSize", 20);
 }
