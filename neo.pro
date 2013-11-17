@@ -13,9 +13,9 @@ TEMPLATE = app
 
 
 # Input
-HEADERS += inputfield.h mainwindow.h statistic.h wordpool.h \
-    statisticwidget.h
-FORMS += mainwindow.ui \
-    statisticwidget.ui
-SOURCES += inputfield.cpp main.cpp mainwindow.cpp statistic.cpp wordpool.cpp \
-    statisticwidget.cpp
+HEADERS += include/inputfield.h include/mainwindow.h include/statistic.h include/wordpool.h \
+    include/statisticwidget.h
+FORMS += form/mainwindow.ui \
+    form/statisticwidget.ui
+SOURCES += src/inputfield.cpp src/main.cpp src/mainwindow.cpp src/statistic.cpp src/wordpool.cpp \
+    src/statisticwidget.cpp
