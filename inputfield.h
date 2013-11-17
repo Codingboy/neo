@@ -43,6 +43,8 @@ protected:
 #ifdef _WIN32
     QProcess* neo20;
 #endif
+    int fontSize;
+    int fontBoldSize;
     
 signals:
     
