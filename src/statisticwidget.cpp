@@ -95,6 +95,7 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
         in.close();
     }
 
+    QSettings s("settings.ini", QSettings::IniFormat);
     QList<QChar> keys = stats.keys();
     for (int i=0; i<keys.size(); i++)
     {
@@ -123,6 +124,8 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
             maxA = a;
         }
     }
+    int goodLineA = s.value("goodLineA").toInt();
+    int badLineA = s.value("badLineA").toInt();
     QList<float> points;
     for (int i=0; i<corrects.size(); i++)
     {
@@ -130,21 +133,21 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
         points.append(((a-minA)/(maxA-minA))*200);
     }
     QGraphicsScene* scene = new QGraphicsScene(0,0,5*corrects.size(),200);
-    if (maxA > 120)
+    if (maxA > goodLineA)
     {
         QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-200, (points.size()-1)*5, 200);
         rect->setBrush(QBrush(QColor("green")));
         scene->addItem(rect);
     }
-    if (maxA > 100 && minA < 120)
+    if (maxA > badLineA && minA < goodLineA)
     {
-        QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-((120-minA)/(maxA-minA))*200, (points.size()-1)*5, 200);
+        QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-((goodLineA-minA)/(maxA-minA))*200, (points.size()-1)*5, 200);
         rect->setBrush(QBrush(QColor("orange")));
         scene->addItem(rect);
     }
-    if (minA < 100)
+    if (minA < badLineA)
     {
-        QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-((100-minA)/(maxA-minA))*200, (points.size()-1)*5, 200);
+        QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-((badLineA-minA)/(maxA-minA))*200, (points.size()-1)*5, 200);
         rect->setBrush(QBrush(QColor("red")));
         scene->addItem(rect);
     }
@@ -154,6 +157,8 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
     }
     this->ui->plot->setScene(scene);
 
+    float goodLineE = s.value("goodLineE").toFloat();
+    float badLineE = s.value("badLineE").toFloat();
     points.clear();
     QGraphicsScene* scene2 = new QGraphicsScene(0,0,5*corrects.size(),200);
     minA = 100;
@@ -175,21 +180,21 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
         float a = (float)mistakes.at(i)*100/(corrects.at(i)+mistakes.at(i));
         points.append(((a-minA)/(maxA-minA))*200);
     }
-    if (maxA > 3)
+    if (maxA > badLineE)
     {
         QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-200, (points.size()-1)*5, 200);
         rect->setBrush(QBrush(QColor("red")));
         scene2->addItem(rect);
     }
-    if (maxA > 2 && minA < 3)
+    if (maxA > goodLineE && minA < badLineE)
     {
-        QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-((3-minA)/(maxA-minA))*200, (points.size()-1)*5, 200);
+        QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-((badLineE-minA)/(maxA-minA))*200, (points.size()-1)*5, 200);
         rect->setBrush(QBrush(QColor("orange")));
         scene2->addItem(rect);
     }
-    if (minA < 2)
+    if (minA < goodLineE)
     {
-        QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-((2-minA)/(maxA-minA))*200, (points.size()-1)*5, 200);
+        QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-((goodLineE-minA)/(maxA-minA))*200, (points.size()-1)*5, 200);
         rect->setBrush(QBrush(QColor("green")));
         scene2->addItem(rect);
     }

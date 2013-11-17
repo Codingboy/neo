@@ -59,6 +59,22 @@ InputField::InputField(QObject *parent) :
     {
         this->settings->setValue("fontBoldSize", 20);
     }
+    if (!this->settings->contains("goodLineA"))
+    {
+        this->settings->setValue("goodLineA", 120);
+    }
+    if (!this->settings->contains("goodLineE"))
+    {
+        this->settings->setValue("goodLineE", 2);
+    }
+    if (!this->settings->contains("badLineA"))
+    {
+        this->settings->setValue("badLineA", 100);
+    }
+    if (!this->settings->contains("badLineE"))
+    {
+        this->settings->setValue("badLineE", 3);
+    }
     this->fontSize = this->settings->value("fontSize").toInt();
     this->fontBoldSize = this->settings->value("fontBoldSize").toInt();
     sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));

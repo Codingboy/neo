@@ -114,4 +114,8 @@ void MainWindow::resetSettings()
     s.setValue("playErrorSound", true);
     s.setValue("fontSize", 12);
     s.setValue("fontBoldSize", 20);
+    s.setValue("goodLineA", 120);
+    s.setValue("goodLineE", 2);
+    s.setValue("badLineA", 100);
+    s.setValue("badLineE", 3);
 }
