@@ -93,6 +93,10 @@ InputField::InputField(QObject *parent) :
     {
         this->settings->setValue("pow", 2.0);
     }
+    if (!this->settings->contains("visualErrorFeedback"))
+    {
+        this->settings->setValue("visualErrorFeedback", true);
+    }
     this->fontSize = this->settings->value("fontSize").toInt();
     this->fontBoldSize = this->settings->value("fontBoldSize").toInt();
     sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));
@@ -156,17 +160,21 @@ void InputField::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->modifiers() & Qt::ShiftModifier)
     {
-        keyboard->setPixmap(neo2);
+        keyboard->setPixmap(neo1);
     }
     else
     {
-        keyboard->setPixmap(neo1);
+        keyboard->setPixmap(neo2);
     }
     if (isReadOnly())
     {
         return;
     }
     QTextEdit::keyReleaseEvent(e);
+    if (this->settings->value("visualErrorFeedback").toBool())
+    {
+        setStyleSheet("QTextEdit { background-color: white }");
+    }
 }
 
 void InputField::keyPressEvent(QKeyEvent* e)
@@ -269,6 +277,10 @@ void InputField::keyPressEvent(QKeyEvent* e)
             }
             else
             {
+                if (this->settings->value("visualErrorFeedback").toBool())
+                {
+                    setStyleSheet("QTextEdit { background-color: red }");
+                }
                 if (this->settings->value("playErrorSound").toBool())
                 {
                     this->sound->play();

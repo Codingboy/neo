@@ -119,4 +119,5 @@ void MainWindow::resetSettings()
     s.setValue("badLineA", 100);
     s.setValue("badLineE", 3);
     s.setValue("pow", 2);
+    s.setValue("visualErrorFeedback", true);
 }
