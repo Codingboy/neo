@@ -200,7 +200,7 @@ const QString& Statistic::getRecommendedWord()
     return this->sorted->at(index).first;
 }
 
-void Statistic::reportSuccess(const QChar& prev, const QChar& actual, const QChar& next)
+void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext)
 {
     QPair<unsigned int, unsigned int> p1 = this->stats->value(actual);
     p1.first++;
@@ -217,9 +217,27 @@ void Statistic::reportSuccess(const QChar& prev, const QChar& actual, const QCha
         p2.first++;
         this->stats->insert(QString(actual)+QString(next), p2);
     }
+    if (prevprev != QChar('\0') && prev != QChar('\0'))
+    {
+        QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prevprev)+QString(prev)+QString(actual));
+        p2.first++;
+        this->stats->insert(QString(prevprev)+QString(prev)+QString(actual), p2);
+    }
+    if (next != QChar('\0') && prev != QChar('\0'))
+    {
+        QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prev)+QString(actual)+QString(next));
+        p2.first++;
+        this->stats->insert(QString(prev)+QString(actual)+QString(next), p2);
+    }
+    if (nextnext != QChar('\0') && next != QChar('\0'))
+    {
+        QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(actual)+QString(next)+QString(nextnext));
+        p2.first++;
+        this->stats->insert(QString(actual)+QString(next)+QString(nextnext), p2);
+    }
 }
 
-void Statistic::reportMistake(const QChar& prev, const QChar& actual, const QChar& next)
+void Statistic::reportMistake(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext)
 {
     QPair<unsigned int, unsigned int> p1 = this->stats->value(actual);
     p1.second++;
@@ -235,5 +253,23 @@ void Statistic::reportMistake(const QChar& prev, const QChar& actual, const QCha
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(actual)+QString(next));
         p2.second++;
         this->stats->insert(QString(actual)+QString(next), p2);
+    }
+    if (prevprev != QChar('\0') && prev != QChar('\0'))
+    {
+        QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prevprev)+QString(prev)+QString(actual));
+        p2.second++;
+        this->stats->insert(QString(prevprev)+QString(prev)+QString(actual), p2);
+    }
+    if (next != QChar('\0') && prev != QChar('\0'))
+    {
+        QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prev)+QString(actual)+QString(next));
+        p2.second++;
+        this->stats->insert(QString(prev)+QString(actual)+QString(next), p2);
+    }
+    if (nextnext != QChar('\0') && next != QChar('\0'))
+    {
+        QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(actual)+QString(next)+QString(nextnext));
+        p2.second++;
+        this->stats->insert(QString(actual)+QString(next)+QString(nextnext), p2);
     }
 }

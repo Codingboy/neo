@@ -166,7 +166,7 @@ void InputField::keyReleaseEvent(QKeyEvent *e)
     {
         return;
     }
-    QTextEdit::keyPressEvent(e);
+    QTextEdit::keyReleaseEvent(e);
 }
 
 void InputField::keyPressEvent(QKeyEvent* e)
@@ -205,7 +205,31 @@ void InputField::keyPressEvent(QKeyEvent* e)
             {
                 corrects++;
                 errorstate = false;
-                stats->reportSuccess(displayText.at(typedText.length()-1), displayText.at(typedText.length()), displayText.at(typedText.length()+1));
+                int prevprevIndex = typedText.length()-2;
+                int prevIndex = typedText.length()-1;
+                int nextnextIndex = typedText.length()+2;
+                int nextIndex = typedText.length()+1;
+                QChar prevprev('\0');
+                QChar prev('\0');
+                QChar next('\0');
+                QChar nextnext('\0');
+                if (prevprevIndex >= 0)
+                {
+                    prevprev = displayText.at(prevprevIndex);
+                }
+                if (prevIndex >= 0)
+                {
+                    prev = displayText.at(prevIndex);
+                }
+                if (nextnextIndex < displayText.length())
+                {
+                    nextnext = displayText.at(nextnextIndex);
+                }
+                if (nextIndex < displayText.length())
+                {
+                    next = displayText.at(nextIndex);
+                }
+                stats->reportSuccess(prevprev, prev, displayText.at(typedText.length()), next, nextnext);
                 QTextCursor cursor(textCursor());
                 QTextCharFormat format;
                 format.setBackground(QBrush(QColor("white")));
@@ -253,7 +277,31 @@ void InputField::keyPressEvent(QKeyEvent* e)
                 {
                     mistakes++;
                     errorstate = true;
-                    stats->reportMistake(displayText.at(typedText.length()-1), displayText.at(typedText.length()), displayText.at(typedText.length()+1));
+                    int prevprevIndex = typedText.length()-2;
+                    int prevIndex = typedText.length()-1;
+                    int nextnextIndex = typedText.length()+2;
+                    int nextIndex = typedText.length()+1;
+                    QChar prevprev('\0');
+                    QChar prev('\0');
+                    QChar next('\0');
+                    QChar nextnext('\0');
+                    if (prevprevIndex >= 0)
+                    {
+                        prevprev = displayText.at(prevprevIndex);
+                    }
+                    if (prevIndex >= 0)
+                    {
+                        prev = displayText.at(prevIndex);
+                    }
+                    if (nextnextIndex < displayText.length())
+                    {
+                        nextnext = displayText.at(nextnextIndex);
+                    }
+                    if (nextIndex < displayText.length())
+                    {
+                        next = displayText.at(nextIndex);
+                    }
+                    stats->reportMistake(prevprev, prev, displayText.at(typedText.length()), next, nextnext);
                 }
                 if (!this->settings->value("blockOnError").toBool())
                 {
