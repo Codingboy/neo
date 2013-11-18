@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction* aboutAction = new QAction("&About", this);
     aboutMenu->addAction(aboutAction);
     this->stats = new Statistic();
-    ui->type->preinit(this->ui->display, stats, 10, this, ui->keyboard);
+    ui->type->preinit(this->ui->display, stats, 300, this, ui->keyboard);
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(show, SIGNAL(triggered()), this, SLOT(openStatistic()));
     connect(reset, SIGNAL(triggered()), this, SLOT(resetStatistic()));
