@@ -17,6 +17,15 @@ SettingsWidget::SettingsWidget(QWidget *parent) :
     }
     this->ui->fontSize->setValue(this->settings->value("fontSize").toInt());
     this->ui->fontBoldSize->setValue(this->settings->value("fontBoldSize").toInt());
+    this->ui->pow->setValue(this->settings->value("pow").toFloat());
+    if (this->settings->value("visualErrorFeedback").toBool())
+    {
+        this->ui->visualErrorFeedback->setChecked(true);
+    }
+    this->ui->goodLineA->setValue(this->settings->value("goodLineA").toInt());
+    this->ui->badLineA->setValue(this->settings->value("badLineA").toInt());
+    this->ui->goodLineE->setValue(this->settings->value("goodLineE").toFloat());
+    this->ui->badLineE->setValue(this->settings->value("badLineE").toFloat());
     connect(this->ui->ok, SIGNAL(clicked()), this, SLOT(ok()));
     connect(this->ui->cancel, SIGNAL(clicked()), this, SLOT(cancel()));
 }
@@ -33,6 +42,12 @@ void SettingsWidget::ok()
     this->settings->setValue("playErrorSound", this->ui->playErrorSound->isChecked());
     this->settings->setValue("fontSize", this->ui->fontSize->value());
     this->settings->setValue("fontBoldSize", this->ui->fontBoldSize->value());
+    this->settings->setValue("pow", this->ui->pow->value());
+    this->settings->setValue("visualErrorFeedback", this->ui->visualErrorFeedback->isChecked());
+    this->settings->setValue("goodLineA", this->ui->goodLineA->value());
+    this->settings->setValue("badLineA", this->ui->badLineA->value());
+    this->settings->setValue("goodLineE", this->ui->goodLineE->value());
+    this->settings->setValue("badLineE", this->ui->badLineE->value());
     ((QFrame*)(this->parent()))->close();
 }
 
