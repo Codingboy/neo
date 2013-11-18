@@ -11,8 +11,15 @@ InputField::~InputField()
 {
 #ifdef _WIN32
     this->neo20->kill();
-#endif
     delete this->neo20;
+#endif
+#ifdef __linux__
+    QProcess setxkbmap;
+    QStringList args;
+    args << "-c" << "setxkbmap de";
+    setxkbmap.start(QString("/bin/bash"), args);
+    setxkbmap.waitForFinished();
+#endif
     delete this->settings;
     delete this->sound;
     if (this->words == NULL)
@@ -32,6 +39,13 @@ InputField::InputField(QObject *parent) :
 #ifdef _WIN32
     this->neo20 = new QProcess();
     this->neo20->start(QString("programs")+QDir::separator()+QString("neo20.exe"));
+#endif
+#ifdef __linux__
+    QProcess setxkbmap;
+    QStringList args;
+    args << "-c" << "setxkbmap -variant neo de";
+    setxkbmap.start(QString("/bin/bash"), args);
+    setxkbmap.waitForFinished();
 #endif
     display = NULL;
     corrects = 0;
