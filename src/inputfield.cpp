@@ -75,6 +75,10 @@ InputField::InputField(QObject *parent) :
     {
         this->settings->setValue("badLineE", 3);
     }
+    if (!this->settings->contains("pow"))
+    {
+        this->settings->setValue("pow", 2.0);
+    }
     this->fontSize = this->settings->value("fontSize").toInt();
     this->fontBoldSize = this->settings->value("fontBoldSize").toInt();
     sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));
@@ -297,7 +301,15 @@ void InputField::showText()
         cursor2.insertText(this->words->getRandomWord());
         cursor2.insertText(" ");
         cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
         cursor2.insertText("\n");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
         cursor2.insertText(this->words->getRandomWord());
         cursor2.insertText(" ");
         cursor2.insertText(this->words->getRandomWord());
@@ -345,6 +357,10 @@ void InputField::showText()
         format2.setForeground(QBrush(QColor("black")));
         cursor2.setCharFormat(format2);
         cursor2.insertText(last.right(last.length()-1));
+        cursor2.insertText(words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(words->getRandomWord());
+        cursor2.insertText(" ");
         cursor2.insertText(words->getRandomWord());
         cursor2.insertText(" ");
         cursor2.insertText(words->getRandomWord());

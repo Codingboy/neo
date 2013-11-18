@@ -371,7 +371,10 @@ int mapCharToFinger(char c)
         case 'Q':
         case '—':
             return 7;
+        case ' ':
+            return 8;
         default:
+            qDebug() << "could not map char to finger";
             return -1;
     }
 }

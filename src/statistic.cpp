@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QDate>
+#include <cmath>
 
 Statistic::Statistic()
 {
@@ -142,7 +143,8 @@ float expRand()
 #ifdef _WIN32
     x /= 32768-1;
 #endif
-    float ret = x*x*x;
+    QSettings s("settings.ini", QSettings::IniFormat);
+    float ret = pow(x, s.value("pow").toFloat());
     if (ret < 0)
     {
         ret = 0;
