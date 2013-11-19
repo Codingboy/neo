@@ -16,7 +16,7 @@ InputField::~InputField()
 #ifdef __linux__
     QProcess setxkbmap;
     QStringList args;
-    args << "-c" << "setxkbmap de";
+    args << "-c" << "setxkbmap de && xset r 51";
     setxkbmap.start(QString("/bin/bash"), args);
     setxkbmap.waitForFinished();
 #endif
@@ -38,12 +38,12 @@ InputField::InputField(QObject *parent) :
 {
 #ifdef _WIN32
     this->neo20 = new QProcess();
-    this->neo20->start(QString("programs")+QDir::separator()+QString("neo20.exe"));
+    this->neo20->start(QString("external")+QDir::separator()+QString("neo20.exe"));
 #endif
 #ifdef __linux__
     QProcess setxkbmap;
     QStringList args;
-    args << "-c" << "setxkbmap -variant neo de";
+    args << "-c" << "setxkbmap lv && xmodmap external/neo_de.xmodmap && xset -r 51";
     setxkbmap.start(QString("/bin/bash"), args);
     setxkbmap.waitForFinished();
 #endif
@@ -96,6 +96,10 @@ InputField::InputField(QObject *parent) :
     if (!this->settings->contains("visualErrorFeedback"))
     {
         this->settings->setValue("visualErrorFeedback", true);
+    }
+    if (!this->settings->contains("influencingSessions"))
+    {
+        this->settings->setValue("influencingSessions", 10);
     }
     this->fontSize = this->settings->value("fontSize").toInt();
     this->fontBoldSize = this->settings->value("fontBoldSize").toInt();
@@ -158,13 +162,10 @@ void InputField::init()
 
 void InputField::keyReleaseEvent(QKeyEvent *e)
 {
-    if (e->modifiers() & Qt::ShiftModifier)
+    if (e->key() == Qt::Key_Shift)
     {
         keyboard->setPixmap(neo1);
-    }
-    else
-    {
-        keyboard->setPixmap(neo2);
+        QTextEdit::keyReleaseEvent(e);
     }
     if (isReadOnly())
     {
@@ -179,13 +180,9 @@ void InputField::keyReleaseEvent(QKeyEvent *e)
 
 void InputField::keyPressEvent(QKeyEvent* e)
 {
-    if (e->modifiers() & Qt::ShiftModifier)
+    if (e->key() == Qt::Key_Shift)
     {
         keyboard->setPixmap(neo2);
-    }
-    else
-    {
-        keyboard->setPixmap(neo1);
     }
     if (isReadOnly())
     {
@@ -345,6 +342,13 @@ void InputField::keyPressEvent(QKeyEvent* e)
         text += "mistakes/100hits\n";
         display->setText(text);
     }
+}
+
+void InputField::abort()
+{
+    setReadOnly(true);
+    clear();
+    this->display->clear();
 }
 
 void InputField::showText()

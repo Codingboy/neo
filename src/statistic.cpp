@@ -28,7 +28,7 @@ void Statistic::load()
     {
         statsCounter = settings.value("statsCounter").toInt();
     }
-    for (int i=statsCounter-1; i>=0 && i+10>=statsCounter; i--)
+    for (int i=statsCounter-1; i>=0 && i+settings.value("influencingSessions").toInt()>=statsCounter; i--)
     {
         load(i);
     }

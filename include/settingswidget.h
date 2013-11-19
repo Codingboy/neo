@@ -22,6 +22,10 @@ private:
 public slots:
     void ok();
     void cancel();
+    void adjustBadLineA();
+    void adjustBadLineE();
+    void adjustGoodLineA();
+    void adjustGoodLineE();
 };
 
 #endif // SETTINGSWIDGET_H

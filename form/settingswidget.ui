@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>200</width>
-    <height>282</height>
+    <height>333</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>181</width>
-     <height>241</height>
+     <height>291</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -154,10 +154,34 @@
      </widget>
     </item>
     <item row="8" column="1">
-     <widget class="QDoubleSpinBox" name="goodLineE"/>
+     <widget class="QDoubleSpinBox" name="goodLineE">
+      <property name="decimals">
+       <number>1</number>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
     </item>
     <item row="9" column="1">
-     <widget class="QDoubleSpinBox" name="badLineE"/>
+     <widget class="QDoubleSpinBox" name="badLineE">
+      <property name="decimals">
+       <number>1</number>
+      </property>
+      <property name="singleStep">
+       <double>0.100000000000000</double>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>influencing sessions</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QSpinBox" name="influencingSessions"/>
     </item>
    </layout>
   </widget>
@@ -165,7 +189,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>250</y>
+     <y>300</y>
      <width>181</width>
      <height>31</height>
     </rect>

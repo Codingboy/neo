@@ -49,6 +49,7 @@ protected:
 signals:
     
 public slots:
+    void abort();
     void init();
     
 };

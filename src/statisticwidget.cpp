@@ -132,7 +132,7 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
         float a = (float)(corrects.at(i)+mistakes.at(i))/5;
         points.append(((a-minA)/(maxA-minA))*200);
     }
-    QGraphicsScene* scene = new QGraphicsScene(0,0,5*corrects.size(),200);
+    QGraphicsScene* scene = new QGraphicsScene(0,0,5*(corrects.size()-1),200);
     if (maxA > goodLineA)
     {
         QGraphicsRectItem* rect = new QGraphicsRectItem(0, 200-200, (points.size()-1)*5, 200);
@@ -160,7 +160,7 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
     float goodLineE = s.value("goodLineE").toFloat();
     float badLineE = s.value("badLineE").toFloat();
     points.clear();
-    QGraphicsScene* scene2 = new QGraphicsScene(0,0,5*corrects.size(),200);
+    QGraphicsScene* scene2 = new QGraphicsScene(0,0,5*(corrects.size()-1),200);
     minA = 100;
     maxA = 0;
     for (int i=0; i<corrects.size(); i++)
@@ -204,7 +204,7 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
     }
     this->ui->plot2->setScene(scene2);
 
-    for (int i=0; i<8; i++)
+    for (int i=0; i<9; i++)
     {
         if (fingerStats.contains(i))
         {
@@ -238,6 +238,9 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
                 case 7:
                     this->ui->finger7->setText(str);
                     break;
+                case 8:
+                    this->ui->finger8->setText(str);
+                    break;
             }
         }
         else
@@ -269,9 +272,14 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
                 case 7:
                     this->ui->finger7->setText("0.0 %");
                     break;
+                case 8:
+                    this->ui->finger8->setText("0.0 %");
+                    break;
             }
         }
     }
+    connect((QObject*)this->ui->plot->horizontalScrollBar(), SIGNAL(valueChanged(int)), (QObject*)this->ui->plot2->horizontalScrollBar(), SLOT(setValue(int)));
+    connect((QObject*)this->ui->plot2->horizontalScrollBar(), SIGNAL(valueChanged(int)), (QObject*)this->ui->plot->horizontalScrollBar(), SLOT(setValue(int)));
 }
 
 int mapCharToFinger(char c)

@@ -26,8 +26,45 @@ SettingsWidget::SettingsWidget(QWidget *parent) :
     this->ui->badLineA->setValue(this->settings->value("badLineA").toInt());
     this->ui->goodLineE->setValue(this->settings->value("goodLineE").toFloat());
     this->ui->badLineE->setValue(this->settings->value("badLineE").toFloat());
+    this->ui->influencingSessions->setValue(this->settings->value("influencingSessions").toInt());
     connect(this->ui->ok, SIGNAL(clicked()), this, SLOT(ok()));
     connect(this->ui->cancel, SIGNAL(clicked()), this, SLOT(cancel()));
+    connect(this->ui->goodLineA, SIGNAL(valueChanged(int)), this, SLOT(adjustBadLineA()));
+    connect(this->ui->goodLineE, SIGNAL(valueChanged(double)), this, SLOT(adjustBadLineE()));
+    connect(this->ui->badLineA, SIGNAL(valueChanged(int)), this, SLOT(adjustGoodLineA()));
+    connect(this->ui->badLineE, SIGNAL(valueChanged(double)), this, SLOT(adjustGoodLineE()));
+}
+
+void SettingsWidget::adjustBadLineA()
+{
+    if (((QSpinBox*)sender())->value() <= this->ui->badLineA->value())
+    {
+        this->ui->badLineA->setValue(((QSpinBox*)sender())->value()-1);
+    }
+}
+
+void SettingsWidget::adjustGoodLineA()
+{
+    if (((QSpinBox*)sender())->value() >= this->ui->goodLineA->value())
+    {
+        this->ui->goodLineA->setValue(((QSpinBox*)sender())->value()+1);
+    }
+}
+
+void SettingsWidget::adjustBadLineE()
+{
+    if (((QDoubleSpinBox*)sender())->value() >= this->ui->badLineE->value())
+    {
+        this->ui->badLineE->setValue(((QDoubleSpinBox*)sender())->value()+0.1);
+    }
+}
+
+void SettingsWidget::adjustGoodLineE()
+{
+    if (((QDoubleSpinBox*)sender())->value() <= this->ui->goodLineE->value())
+    {
+        this->ui->goodLineE->setValue(((QDoubleSpinBox*)sender())->value()-0.1);
+    }
 }
 
 SettingsWidget::~SettingsWidget()
@@ -48,6 +85,7 @@ void SettingsWidget::ok()
     this->settings->setValue("badLineA", this->ui->badLineA->value());
     this->settings->setValue("goodLineE", this->ui->goodLineE->value());
     this->settings->setValue("badLineE", this->ui->badLineE->value());
+    this->settings->setValue("influencingSessions", this->ui->influencingSessions->value());
     ((QFrame*)(this->parent()))->close();
 }
 

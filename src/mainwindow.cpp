@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMenu* file = this->ui->menuBar->addMenu("&File");
     QAction* quit = new QAction("&Quit", this);
     file->addAction(quit);
+    QAction* abort = new QAction("&Abort", this);
+    file->addAction(abort);
     QMenu* lesson = this->ui->menuBar->addMenu("&Lesson");
     QList<QAction*> lessons;
     QDir dir("wp");
@@ -51,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAbout()));
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(showSettings()));
     connect(resetSettingsAction, SIGNAL(triggered()), this, SLOT(resetSettings()));
+    connect(abort, SIGNAL(triggered()), this->ui->type, SLOT(abort()));
     for (int i=0; i<files.size(); i++)
     {
         connect(lessons.at(i), SIGNAL(triggered()), ui->type, SLOT(init()));
@@ -120,4 +123,5 @@ void MainWindow::resetSettings()
     s.setValue("badLineE", 3);
     s.setValue("pow", 2);
     s.setValue("visualErrorFeedback", true);
+    s.setValue("influencingSessions", 10);
 }
