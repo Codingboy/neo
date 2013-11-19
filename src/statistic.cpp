@@ -40,12 +40,12 @@ void Statistic::load(unsigned int number)
     QFile in(path);
     if (!in.exists())
     {
-        qDebug() << "file \"" << path << "\" does not exist";
+        qDebug() << "file" << path << "does not exist";
         return;
     }
     if (!in.open(QIODevice::ReadOnly))
     {
-        qDebug() << "file \"" << path << "\" not openable";
+        qDebug() << "file" << path << "not openable";
         return;
     }
     unsigned int lineCounter = 0;
@@ -84,6 +84,7 @@ void Statistic::load(unsigned int number)
         lineCounter++;
     }
     in.close();
+    qDebug() << "loaded stats" << path;
 }
 
 void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mistakes, QString& lesson)
@@ -92,11 +93,11 @@ void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mi
 	QFile out(path);
     if (out.exists())
     {
-        qDebug() << "file \"" << path << "\" already exists";
+        qDebug() << "file" << path << "already exists";
     }
     if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
     {
-        qDebug() << "file \"" << path << "\" not openable";
+        qDebug() << "file" << path << "not openable";
         return;
     }
     out.write(QString(QDate::currentDate().toString()+"\n").toLatin1());
@@ -129,6 +130,7 @@ void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mi
         out.write("\n");
     }
     out.close();
+    qDebug() << "saved stats" << path;
 }
 
 /**

@@ -35,12 +35,12 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
         QFile in(path);
         if (!in.exists())
         {
-            qDebug() << "file \"" << path << "\" does not exist";
+            qDebug() << "file" << path << "does not exist";
             continue;
         }
         if (!in.open(QIODevice::ReadOnly))
         {
-            qDebug() << "file \"" << path << "\" not openable";
+            qDebug() << "file" << path << "not openable";
             continue;
         }
         unsigned int lineCounter = 0;

@@ -12,6 +12,7 @@ InputField::~InputField()
 #ifdef _WIN32
     this->neo20->kill();
     delete this->neo20;
+    qDebug() << "qwertz keylayout active";
 #endif
 #ifdef __linux__
     QProcess setxkbmap;
@@ -19,6 +20,7 @@ InputField::~InputField()
     args << "-c" << "setxkbmap de && xset r 51";
     setxkbmap.start(QString("/bin/bash"), args);
     setxkbmap.waitForFinished();
+    qDebug() << "qwertz keylayout active";
 #endif
     delete this->settings;
     delete this->sound;
@@ -39,6 +41,7 @@ InputField::InputField(QObject *parent) :
 #ifdef _WIN32
     this->neo20 = new QProcess();
     this->neo20->start(QString("external")+QDir::separator()+QString("neo20.exe"));
+    qDebug() << "neo keylayout active";
 #endif
 #ifdef __linux__
     QProcess setxkbmap;
@@ -46,6 +49,7 @@ InputField::InputField(QObject *parent) :
     args << "-c" << "setxkbmap lv && xmodmap external/neo_de.xmodmap && xset -r 51";
     setxkbmap.start(QString("/bin/bash"), args);
     setxkbmap.waitForFinished();
+    qDebug() << "neo keylayout active";
 #endif
     display = NULL;
     corrects = 0;
@@ -101,6 +105,7 @@ InputField::InputField(QObject *parent) :
     {
         this->settings->setValue("influencingSessions", 10);
     }
+    qDebug() << "settings loaded or generated";
     this->fontSize = this->settings->value("fontSize").toInt();
     this->fontBoldSize = this->settings->value("fontBoldSize").toInt();
     sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));
@@ -112,7 +117,7 @@ Wordpool* InputField::loadWordpool(QString& lesson)
     QFile in(path);
     if (!in.open(QIODevice::ReadOnly))
     {
-        qDebug() << "file not openable";
+        qDebug() << "file" << path << "not openable";
     }
     Wordpool* wp = new Wordpool(this->stats);
     while (true)
@@ -129,6 +134,7 @@ Wordpool* InputField::loadWordpool(QString& lesson)
     }
     wp->finalise();
     in.close();
+    qDebug() << "loaded wordpool" << path;
     return wp;
 }
 
@@ -145,6 +151,7 @@ void InputField::preinit(QTextEdit* display, Statistic* stats, unsigned int time
 
 void InputField::init()
 {
+    qDebug() << "starting session";
     mistakes = 0;
     corrects = 0;
     hits = 0;
@@ -165,7 +172,10 @@ void InputField::keyReleaseEvent(QKeyEvent *e)
     if (e->key() == Qt::Key_Shift)
     {
         keyboard->setPixmap(neo1);
-        QTextEdit::keyReleaseEvent(e);
+    }
+    if (e->key() == -1)
+    {
+        keyboard->setPixmap(neo1);
     }
     if (isReadOnly())
     {
@@ -183,6 +193,10 @@ void InputField::keyPressEvent(QKeyEvent* e)
     if (e->key() == Qt::Key_Shift)
     {
         keyboard->setPixmap(neo2);
+    }
+    if (e->key() == Qt::Key_Mode_switch)
+    {
+        keyboard->setPixmap(neo3);
     }
     if (isReadOnly())
     {
@@ -349,6 +363,7 @@ void InputField::abort()
     setReadOnly(true);
     clear();
     this->display->clear();
+    qDebug() << "session aborted";
 }
 
 void InputField::showText()

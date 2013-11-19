@@ -124,4 +124,5 @@ void MainWindow::resetSettings()
     s.setValue("pow", 2);
     s.setValue("visualErrorFeedback", true);
     s.setValue("influencingSessions", 10);
+    qDebug() << "settings resetted";
 }
