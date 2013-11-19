@@ -108,6 +108,10 @@ StatisticWidget::StatisticWidget(QWidget *parent) :
             mistakes += fingerStats.value(finger).second;
             fingerStats.insert(finger, qMakePair(success, mistakes));
         }
+        else
+        {
+            qDebug() << "unknown key" << keys.at(i);
+        }
     }
 
     float minA = 10000;
