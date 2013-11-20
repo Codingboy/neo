@@ -134,7 +134,7 @@ void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mi
 }
 
 /**
- * @return (0;1), most values will be near 0
+ * @return (0;1), most values will be near 0 if pow > 1
  */
 float expRand()
 {
@@ -173,7 +173,7 @@ void Statistic::setUsedWords(QList<QString>* words)
                 float successes = this->stats->value(keys.at(j)).first;
                 float mistakes = this->stats->value(keys.at(j)).second;
                 float balance = mistakes / (mistakes + successes);
-                actualBalance += balance;
+                actualBalance += balance*actualWord.count(keys.at(j));
             }
         }
         this->sorted->append(qMakePair(actualWord, actualBalance));

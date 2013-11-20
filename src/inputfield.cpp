@@ -105,7 +105,7 @@ InputField::InputField(QObject *parent) :
     {
         this->settings->setValue("influencingSessions", 10);
     }
-    qDebug() << "settings loaded or generated";
+    qDebug() << "generated missing settings";
     this->fontSize = this->settings->value("fontSize").toInt();
     this->fontBoldSize = this->settings->value("fontBoldSize").toInt();
     sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));

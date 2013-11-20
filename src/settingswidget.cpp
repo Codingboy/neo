@@ -1,5 +1,6 @@
 #include "settingswidget.h"
 #include "ui_settingswidget.h"
+#include <QDebug>
 
 SettingsWidget::SettingsWidget(QWidget *parent) :
     QWidget(parent),
@@ -87,6 +88,7 @@ void SettingsWidget::ok()
     this->settings->setValue("badLineE", this->ui->badLineE->value());
     this->settings->setValue("influencingSessions", this->ui->influencingSessions->value());
     ((QFrame*)(this->parent()))->close();
+    qDebug() << "saved settings";
 }
 
 void SettingsWidget::cancel()
