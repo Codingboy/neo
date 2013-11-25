@@ -400,29 +400,38 @@ void InputField::showText()
         format2.setForeground(QBrush(QColor("black")));
         cursor2.setCharFormat(format2);
         cursor2.insertText(word.right(word.length()-1));
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText("\n");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(this->words->getRandomWord());
-        cursor2.insertText("\n");
+        if (!word.contains(" "))
+        {
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText("\n");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText("\n");
+        }
+        else
+        {
+            cursor2.insertText("\n");
+            cursor2.insertText(this->words->getRandomWord());
+            cursor2.insertText("\n");
+        }
     }
     else
     {
@@ -462,18 +471,26 @@ void InputField::showText()
         format2.setForeground(QBrush(QColor("black")));
         cursor2.setCharFormat(format2);
         cursor2.insertText(last.right(last.length()-1));
-        cursor2.insertText(words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(words->getRandomWord());
-        cursor2.insertText(" ");
-        cursor2.insertText(words->getRandomWord());
-        cursor2.insertText("\n");
+        QString word = words->getRandomWord();
+        cursor2.insertText(word);
+        if (!word.contains(" "))
+        {
+            cursor2.insertText(" ");
+            cursor2.insertText(words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(words->getRandomWord());
+            cursor2.insertText(" ");
+            cursor2.insertText(words->getRandomWord());
+            cursor2.insertText("\n");
+        }
+        else
+        {
+            cursor2.insertText("\n");
+        }
         clear();
     }
 }
