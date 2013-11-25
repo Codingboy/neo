@@ -190,15 +190,22 @@ void Statistic::setUsedWords(QList<QString>* words)
             }
         }
     }
+#if 0
+    for (int i=0; i<keys.size(); i++)
+    {
+        qDebug() << keys.at(i) << this->stats->value(keys.at(i)).first << this->stats->value(keys.at(i)).second;
+    }
+    for (int i=0; i<this->sorted->size(); i++)
+    {
+        qDebug() << this->sorted->at(i).first << this->sorted->at(i).second;
+    }
+#endif
+    this->stats->clear();
 }
 
 const QString& Statistic::getRecommendedWord()
 {
-    int index = expRand()*this->sorted->size()-1;
-    if (index < 0)
-    {
-        index = 0;
-    }
+    int index = expRand()*(this->sorted->size()-1);
     return this->sorted->at(index).first;
 }
 

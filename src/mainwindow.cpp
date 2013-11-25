@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QAction* action = new QAction(files.at(i), this);
         lessons.append(action);
         lesson->addAction(action);
+        qDebug() << "added lesson" << files.at(i);
     }
     QMenu* statistic = this->ui->menuBar->addMenu("&Statistic");
     QAction* show = new QAction("&Show", this);
