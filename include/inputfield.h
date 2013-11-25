@@ -10,6 +10,7 @@
 #include <QSettings>
 #include <QSound>
 #include <QProcess>
+#include <QLabel>
 
 class InputField : public QTextEdit
 {
@@ -17,10 +18,9 @@ class InputField : public QTextEdit
 public:
     explicit InputField(QObject *parent = 0);
     ~InputField();
-    void preinit(QTextEdit* display, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard);
+    void preinit(QTextEdit* display, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard, QLabel* timeLeftLabel, QLabel* hitsLabel, QLabel* mistakesLabel, QLabel* hitsPerMinuteLabel, QLabel* mistakesRateLabel);
     unsigned int mistakes;
     unsigned int corrects;
-    unsigned int hits;
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
     virtual void keyReleaseEvent(QKeyEvent *e);
@@ -45,6 +45,11 @@ protected:
 #endif
     int fontSize;
     int fontBoldSize;
+    QLabel* timeLeftLabel;
+    QLabel* hitsLabel;
+    QLabel* mistakesLabel;
+    QLabel* hitsPerMinuteLabel;
+    QLabel* mistakesRateLabel;
     
 signals:
     

@@ -53,7 +53,6 @@ InputField::InputField(QObject *parent) :
 #endif
     display = NULL;
     corrects = 0;
-    hits = 0;
     mistakes = 0;
     errorstate = false;
     this->settings = new QSettings("settings.ini", QSettings::IniFormat);
@@ -138,7 +137,7 @@ Wordpool* InputField::loadWordpool(QString& lesson)
     return wp;
 }
 
-void InputField::preinit(QTextEdit* display, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard)
+void InputField::preinit(QTextEdit* display, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard, QLabel* timeLeftLabel, QLabel* hitsLabel, QLabel* mistakesLabel, QLabel* hitsPerMinuteLabel, QLabel* mistakesRateLabel)
 {
     this->display = display;
     this->stats = stats;
@@ -146,6 +145,11 @@ void InputField::preinit(QTextEdit* display, Statistic* stats, unsigned int time
     this->mw = mw;
     this->keyboard = keyboard;
     this->keyboard->setPixmap(neo1);
+    this->timeLeftLabel = timeLeftLabel;
+    this->hitsLabel = hitsLabel;
+    this->mistakesLabel = mistakesLabel;
+    this->hitsPerMinuteLabel = hitsPerMinuteLabel;
+    this->mistakesRateLabel = mistakesRateLabel;
     setReadOnly(true);
 }
 
@@ -154,7 +158,6 @@ void InputField::init()
     qDebug() << "starting session";
     mistakes = 0;
     corrects = 0;
-    hits = 0;
     errorstate = false;
     this->stats->load();
     QAction* action = (QAction*)QObject::sender();
@@ -213,7 +216,6 @@ void InputField::keyPressEvent(QKeyEvent* e)
         QString key = e->text();
         if (key != QString(""))
         {
-            hits++;
             if (e->key() == Qt::Key_Return)
             {
                 key = QString("\n");
@@ -340,6 +342,16 @@ void InputField::keyPressEvent(QKeyEvent* e)
         }
     }
     QTime t = this->startTime.addSecs(this->time);
+    int s = QTime::currentTime().secsTo(t);
+    if (s < 0)
+    {
+        s = 0;
+    }
+    this->timeLeftLabel->setText(QString::number(s, 10)+" seconds");
+    this->hitsLabel->setText(QString::number(corrects, 10)+" hits");
+    this->mistakesLabel->setText(QString::number(mistakes, 10)+" mistakes");
+    this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/(((double)QTime::currentTime().secsTo(this->startTime)*(-1))/60)), 10)+" hits/minute");
+    this->mistakesRateLabel->setText(QString::number((double)mistakes*100/(mistakes+corrects))+" % mistakes");
     if (t <= QTime::currentTime())
     {
         int statsCounter = this->settings->value("statsCounter").toInt();

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>650</width>
-    <height>397</height>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,6 +71,53 @@
      <pixmap>../graphics/neo1.png</pixmap>
     </property>
    </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>-1</x>
+      <y>350</y>
+      <width>651</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="hits">
+       <property name="text">
+        <string>0 hits</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="mistakes">
+       <property name="text">
+        <string>0 mistakes</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="hitsPerMinute">
+       <property name="text">
+        <string>0 hits/minute</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="mistakesper100">
+       <property name="text">
+        <string>0 mistakes/100</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="timeLeft">
+       <property name="text">
+        <string>300 seconds</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -90,7 +137,6 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
