@@ -11,7 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia
 TARGET = neo
 TEMPLATE = app
 
-INCLUDEPATH = include
+INCLUDEPATH += include
+CONFIG += c++11
 
 # Input
 HEADERS += include/inputfield.h include/mainwindow.h include/statistic.h include/wordpool.h \

@@ -103,6 +103,7 @@ InputField::InputField(QObject *parent) :
     qDebug() << "generated missing settings";
     this->fontSize = this->settings->value("fontSize").toInt();
     sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));
+    started = false;
 }
 
 Wordpool* InputField::loadWordpool(QString& lesson)
@@ -163,6 +164,7 @@ void InputField::init()
     clear();
     setReadOnly(false);
     showText();
+    this->started = false;
 }
 
 void InputField::keyReleaseEvent(QKeyEvent *e)
@@ -188,6 +190,11 @@ void InputField::keyReleaseEvent(QKeyEvent *e)
 
 void InputField::keyPressEvent(QKeyEvent* e)
 {
+    if (!this->started)
+    {
+        this->startTime = QTime::currentTime();
+        this->started = true;
+    }
     if (e->key() == Qt::Key_Shift)
     {
         keyboard->setPixmap(neo2);

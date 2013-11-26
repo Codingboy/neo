@@ -49,6 +49,7 @@ protected:
     QLabel* mistakesLabel;
     QLabel* hitsPerMinuteLabel;
     QLabel* mistakesRateLabel;
+    bool started;
     
 signals:
     
