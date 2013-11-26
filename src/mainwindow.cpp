@@ -116,8 +116,7 @@ void MainWindow::resetSettings()
     QSettings s("settings.ini", QSettings::IniFormat);
     s.setValue("blockOnError", true);
     s.setValue("playErrorSound", true);
-    s.setValue("fontSize", 12);
-    s.setValue("fontBoldSize", 20);
+    s.setValue("fontSize", 20);
     s.setValue("goodLineA", 120);
     s.setValue("goodLineE", 2);
     s.setValue("badLineA", 100);

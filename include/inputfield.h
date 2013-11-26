@@ -44,7 +44,6 @@ protected:
     QProcess* neo20;
 #endif
     int fontSize;
-    int fontBoldSize;
     QLabel* timeLeftLabel;
     QLabel* hitsLabel;
     QLabel* mistakesLabel;

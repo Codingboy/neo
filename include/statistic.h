@@ -10,6 +10,7 @@ class Statistic
 {
 public:
     Statistic();
+    virtual ~Statistic();
     void save(unsigned int number, unsigned int corrects, unsigned int mistakes, QString& lesson);
     void reportSuccess(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext);
     void reportMistake(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext);

@@ -17,7 +17,6 @@ SettingsWidget::SettingsWidget(QWidget *parent) :
         this->ui->playErrorSound->setChecked(true);
     }
     this->ui->fontSize->setValue(this->settings->value("fontSize").toInt());
-    this->ui->fontBoldSize->setValue(this->settings->value("fontBoldSize").toInt());
     this->ui->pow->setValue(this->settings->value("pow").toFloat());
     if (this->settings->value("visualErrorFeedback").toBool())
     {
@@ -79,7 +78,6 @@ void SettingsWidget::ok()
     this->settings->setValue("blockOnError", this->ui->blockOnError->isChecked());
     this->settings->setValue("playErrorSound", this->ui->playErrorSound->isChecked());
     this->settings->setValue("fontSize", this->ui->fontSize->value());
-    this->settings->setValue("fontBoldSize", this->ui->fontBoldSize->value());
     this->settings->setValue("pow", this->ui->pow->value());
     this->settings->setValue("visualErrorFeedback", this->ui->visualErrorFeedback->isChecked());
     this->settings->setValue("goodLineA", this->ui->goodLineA->value());

@@ -70,11 +70,7 @@ InputField::InputField(QObject *parent) :
     }
     if (!this->settings->contains("fontSize"))
     {
-        this->settings->setValue("fontSize", 12);
-    }
-    if (!this->settings->contains("fontBoldSize"))
-    {
-        this->settings->setValue("fontBoldSize", 20);
+        this->settings->setValue("fontSize", 20);
     }
     if (!this->settings->contains("goodLineA"))
     {
@@ -106,7 +102,6 @@ InputField::InputField(QObject *parent) :
     }
     qDebug() << "generated missing settings";
     this->fontSize = this->settings->value("fontSize").toInt();
-    this->fontBoldSize = this->settings->value("fontBoldSize").toInt();
     sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));
 }
 
@@ -212,7 +207,6 @@ void InputField::keyPressEvent(QKeyEvent* e)
     else
     {
         this->fontSize = this->settings->value("fontSize").toInt();
-        this->fontBoldSize = this->settings->value("fontBoldSize").toInt();
         QString key = e->text();
         if (key != QString(""))
         {
@@ -269,10 +263,10 @@ void InputField::keyPressEvent(QKeyEvent* e)
                 cursor2.insertText(typedText);
                 QTextCursor cursor3(this->display->textCursor());
                 QTextCharFormat format3;
-                format3.setBackground(QBrush(QColor("white")));
+                format3.setBackground(QBrush(QColor("lightgrey")));
                 format3.setForeground(QBrush(QColor("black")));
-                format3.setFontWeight(QFont::Bold);
-                format3.setFontPointSize(this->fontBoldSize);
+                format3.setFontWeight(QFont::Normal);
+                format3.setFontPointSize(this->fontSize);
                 cursor3.setCharFormat(format3);
                 cursor3.insertText(displayText.left(typedText.length()+1).right(1));
                 QTextCursor cursor4(this->display->textCursor());
@@ -384,9 +378,9 @@ void InputField::showText()
     {
         QTextCursor cursor(this->display->textCursor());
         QTextCharFormat format;
-        format.setFontWeight(QFont::Bold);
-        format.setFontPointSize(this->fontBoldSize);
-        format.setBackground(QBrush(QColor("white")));
+        format.setFontWeight(QFont::Normal);
+        format.setFontPointSize(this->fontSize);
+        format.setBackground(QBrush(QColor("lightgrey")));
         format.setForeground(QBrush(QColor("black")));
         cursor.setCharFormat(format);
         QString word = this->words->getRandomWord();
@@ -457,9 +451,9 @@ void InputField::showText()
         this->display->clear();
         QTextCursor cursor(this->display->textCursor());
         QTextCharFormat format;
-        format.setFontWeight(QFont::Bold);
-        format.setFontPointSize(this->fontBoldSize);
-        format.setBackground(QBrush(QColor("white")));
+        format.setFontWeight(QFont::Normal);
+        format.setFontPointSize(this->fontSize);
+        format.setBackground(QBrush(QColor("lightgrey")));
         format.setForeground(QBrush(QColor("black")));
         cursor.setCharFormat(format);
         cursor.insertText(last.left(1));

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>200</width>
-    <height>333</height>
+    <height>301</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>181</width>
-     <height>291</height>
+     <height>261</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -54,26 +54,6 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>fontsize</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QSpinBox" name="fontSize"/>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>fontsize (bold)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QSpinBox" name="fontBoldSize"/>
-    </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
@@ -88,14 +68,24 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>fontsize</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QSpinBox" name="fontSize"/>
+    </item>
+    <item row="4" column="0">
      <widget class="QLabel" name="label_6">
       <property name="text">
        <string>random word pow</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
+    <item row="4" column="1">
      <widget class="QDoubleSpinBox" name="pow">
       <property name="decimals">
        <number>1</number>
@@ -111,49 +101,42 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
+    <item row="5" column="0">
      <widget class="QLabel" name="label_7">
       <property name="text">
        <string>good line (hits)</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="label_8">
-      <property name="text">
-       <string>bad line (hits)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="label_9">
-      <property name="text">
-       <string>good line (mistakes)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="0">
-     <widget class="QLabel" name="label_10">
-      <property name="text">
-       <string>bad line (mistakes)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
+    <item row="5" column="1">
      <widget class="QSpinBox" name="goodLineA">
       <property name="maximum">
        <number>1000</number>
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>bad line (hits)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
      <widget class="QSpinBox" name="badLineA">
       <property name="maximum">
        <number>1000</number>
       </property>
      </widget>
     </item>
-    <item row="8" column="1">
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>good line (mistakes)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
      <widget class="QDoubleSpinBox" name="goodLineE">
       <property name="decimals">
        <number>1</number>
@@ -163,7 +146,14 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="1">
+    <item row="8" column="0">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>bad line (mistakes)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
      <widget class="QDoubleSpinBox" name="badLineE">
       <property name="decimals">
        <number>1</number>
@@ -173,14 +163,14 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="0">
+    <item row="9" column="0">
      <widget class="QLabel" name="label_11">
       <property name="text">
        <string>influencing sessions</string>
       </property>
      </widget>
     </item>
-    <item row="10" column="1">
+    <item row="9" column="1">
      <widget class="QSpinBox" name="influencingSessions"/>
     </item>
    </layout>
@@ -189,7 +179,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>300</y>
+     <y>270</y>
      <width>181</width>
      <height>31</height>
     </rect>

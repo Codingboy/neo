@@ -18,6 +18,12 @@ Statistic::Statistic()
     qsrand(QTime::currentTime().msec());
 }
 
+Statistic::~Statistic()
+{
+    delete this->sorted;
+    delete this->stats;
+}
+
 void Statistic::load()
 {
     this->sorted->clear();

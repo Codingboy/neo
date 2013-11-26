@@ -11,6 +11,11 @@
 
 int mapCharToFinger(char c);
 
+StatisticWidget::~StatisticWidget()
+{
+    delete this->ui;
+}
+
 StatisticWidget::StatisticWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::StatisticWidget)

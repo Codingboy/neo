@@ -12,6 +12,7 @@ class StatisticWidget : public QWidget
     Q_OBJECT
 public:
     explicit StatisticWidget(QWidget *parent = 0);
+    virtual ~StatisticWidget();
 
 private:
     Ui::StatisticWidget* ui;
