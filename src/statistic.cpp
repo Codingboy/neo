@@ -15,19 +15,24 @@ Statistic::Statistic()
 {
     this->sorted = new QList<QPair<QString, float> >();
     this->stats = new QMap<QString, QPair<unsigned int, unsigned int> >();
+    this->timeStats = new QMap<QString, QList<unsigned int> >();
     qsrand(QTime::currentTime().msec());
+    this->lastSuccess = QTime::currentTime();
+    this->lastSuccess.start();
 }
 
 Statistic::~Statistic()
 {
     delete this->sorted;
     delete this->stats;
+    delete this->timeStats;
 }
 
 void Statistic::load()
 {
     this->sorted->clear();
     this->stats->clear();
+    this->timeStats->clear();
     int statsCounter = 0;
     QSettings settings("settings.ini", QSettings::IniFormat);
     if (settings.contains("statsCounter"))
@@ -71,15 +76,16 @@ void Statistic::load(unsigned int number)
         line.remove("\n");
         line.remove("\r");
         QStringList sl = line.split(" ");
-        unsigned int successes = sl.at(0).toInt();
-        unsigned int mistakes = sl.at(1).toInt();
-        QString key;
-        for (int i=2; i<sl.size(); i++)
+        char entryType = sl.at(0).toLatin1().at(0);
+        if (entryType == 'm')
         {
-            key += QChar(sl.at(i).toInt());
-        }
-        if (key.length() > 1)
-        {
+            unsigned int successes = sl.at(1).toInt();
+            unsigned int mistakes = sl.at(2).toInt();
+            QString key;
+            for (int i=3; i<sl.size(); i++)
+            {
+                key += QChar(sl.at(i).toInt());
+            }
             if (this->stats->contains(key))
             {
                 successes += this->stats->value(key).first;
@@ -87,10 +93,24 @@ void Statistic::load(unsigned int number)
             }
             this->stats->insert(key, qMakePair(successes, mistakes));
         }
+        if (entryType == 't')
+        {
+            int listSize = sl.at(1).toInt();
+            QList<unsigned int> l;
+            for (int i=0; i<listSize; i++)
+            {
+                l.append(sl.at(2+i).toInt());
+            }
+            QString key;
+            for (int i=2+listSize; i<sl.size(); i++)
+            {
+                key += QChar(sl.at(i).toInt());
+            }
+            this->timeStats->insert(key, l);
+        }
         lineCounter++;
     }
     in.close();
-    qDebug() << "loaded stats" << path;
 }
 
 void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mistakes, QString& lesson)
@@ -116,6 +136,7 @@ void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mi
     {
         unsigned int successes = this->stats->value(keys.at(i)).first;
         unsigned int mistakes = this->stats->value(keys.at(i)).second;
+        out.write("m ");
         str.setNum(successes);
         out.write(str.toStdString().c_str());
         out.write(" ");
@@ -132,6 +153,37 @@ void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mi
             str.setNum(tmp);
             out.write(" ");
             out.write(str.toStdString().c_str());
+        }
+        out.write("\n");
+    }
+    QList<QString> timeKeys = this->timeStats->keys();
+    for (int i=0; i<timeKeys.size(); i++)
+    {
+        QList<unsigned int> l = this->timeStats->value(timeKeys.at(i));
+        if (l.size() > 0)
+        {
+            out.write("t ");
+            out.write(QString::number(l.size(), 10).toStdString().c_str());
+            out.write(" ");
+        }
+        for (int j=0; j<l.size(); j++)
+        {
+            out.write(QString::number(l.at(j)).toStdString().c_str());
+            if (j+1<l.size())
+            {
+                out.write(" ");
+            }
+        }
+        QString key = timeKeys.at(i);
+        for (int j=0; j<key.length(); j++)
+        {
+            int tmp = (int)key.at(j).toLatin1();
+            if (tmp < 0)
+            {
+                tmp += 256;
+            }
+            out.write(" ");
+            out.write(QString::number(tmp, 10).toStdString().c_str());
         }
         out.write("\n");
     }
@@ -168,6 +220,7 @@ void Statistic::setUsedWords(QList<QString>* words)
 {
     this->sorted->clear();
     QList<QString> keys = this->stats->keys();
+    QList<QString> timeKeys = this->timeStats->keys();
     for (int i=0; i<words->size(); i++)
     {
         QString actualWord = words->at(i);
@@ -180,6 +233,20 @@ void Statistic::setUsedWords(QList<QString>* words)
                 float mistakes = this->stats->value(keys.at(j)).second;
                 float balance = mistakes / (mistakes + successes);
                 actualBalance += balance*actualWord.count(keys.at(j));
+            }
+        }
+        for (int j=0; j<timeKeys.size(); j++)
+        {
+            if (actualWord.contains(timeKeys.at(j)))
+            {
+                QList<unsigned int> l = this->timeStats->value(timeKeys.at(j));
+                float balance = 0;
+                for (int k=0; k<l.size(); k++)
+                {
+                    balance += ((float)l.at(k))/1000;
+                }
+                balance /= l.size();
+                actualBalance += balance*actualWord.count(timeKeys.at(j));
             }
         }
         this->sorted->append(qMakePair(actualWord, actualBalance));
@@ -196,17 +263,20 @@ void Statistic::setUsedWords(QList<QString>* words)
             }
         }
     }
+#if 1
 #if 0
     for (int i=0; i<keys.size(); i++)
     {
         qDebug() << keys.at(i) << this->stats->value(keys.at(i)).first << this->stats->value(keys.at(i)).second;
     }
+#endif
     for (int i=0; i<this->sorted->size(); i++)
     {
         qDebug() << this->sorted->at(i).first << this->sorted->at(i).second;
     }
 #endif
     this->stats->clear();
+    this->timeStats->clear();
 }
 
 const QString& Statistic::getRecommendedWord()
@@ -217,6 +287,13 @@ const QString& Statistic::getRecommendedWord()
 
 void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext)
 {
+    QTime timeout = this->lastSuccess.addSecs(5);
+    if (timeout > QTime::currentTime())
+    {
+        QList<unsigned int> l = this->timeStats->value(actual);
+        l.append(this->lastSuccess.elapsed());
+        this->timeStats->insert(actual, l);
+    }
     QPair<unsigned int, unsigned int> p1 = this->stats->value(actual);
     p1.first++;
     this->stats->insert(actual, p1);
@@ -225,31 +302,66 @@ void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QC
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prev)+QString(actual));
         p2.first++;
         this->stats->insert(QString(prev)+QString(actual), p2);
+        if (timeout > QTime::currentTime())
+        {
+            QList<unsigned int> l = this->timeStats->value(QString(prev)+QString(actual));
+            l.append(this->lastSuccess.elapsed());
+            this->timeStats->insert(QString(prev)+QString(actual), l);
+        }
     }
     if (next != QChar('\0'))
     {
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(actual)+QString(next));
         p2.first++;
         this->stats->insert(QString(actual)+QString(next), p2);
+        QTime timeout = this->lastSuccess.addSecs(5);
+        if (timeout > QTime::currentTime())
+        {
+            QList<unsigned int> l = this->timeStats->value(QString(actual)+QString(next));
+            l.append(this->lastSuccess.elapsed());
+            this->timeStats->insert(QString(actual)+QString(next), l);
+        }
     }
     if (prevprev != QChar('\0') && prev != QChar('\0'))
     {
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prevprev)+QString(prev)+QString(actual));
         p2.first++;
         this->stats->insert(QString(prevprev)+QString(prev)+QString(actual), p2);
+        QTime timeout = this->lastSuccess.addSecs(5);
+        if (timeout > QTime::currentTime())
+        {
+            QList<unsigned int> l = this->timeStats->value(QString(prevprev)+QString(prev)+QString(actual));
+            l.append(this->lastSuccess.elapsed());
+            this->timeStats->insert(QString(prevprev)+QString(prev)+QString(actual), l);
+        }
     }
     if (next != QChar('\0') && prev != QChar('\0'))
     {
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prev)+QString(actual)+QString(next));
         p2.first++;
         this->stats->insert(QString(prev)+QString(actual)+QString(next), p2);
+        QTime timeout = this->lastSuccess.addSecs(5);
+        if (timeout > QTime::currentTime())
+        {
+            QList<unsigned int> l = this->timeStats->value(QString(prev)+QString(actual)+QString(next));
+            l.append(this->lastSuccess.elapsed());
+            this->timeStats->insert(QString(prev)+QString(actual)+QString(next), l);
+        }
     }
     if (nextnext != QChar('\0') && next != QChar('\0'))
     {
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(actual)+QString(next)+QString(nextnext));
         p2.first++;
         this->stats->insert(QString(actual)+QString(next)+QString(nextnext), p2);
+        QTime timeout = this->lastSuccess.addSecs(5);
+        if (timeout > QTime::currentTime())
+        {
+            QList<unsigned int> l = this->timeStats->value(QString(actual)+QString(next)+QString(nextnext));
+            l.append(this->lastSuccess.elapsed());
+            this->timeStats->insert(QString(actual)+QString(next)+QString(nextnext), l);
+        }
     }
+    this->lastSuccess.restart();
 }
 
 void Statistic::reportMistake(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext)

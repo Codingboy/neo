@@ -5,6 +5,7 @@
 #include <QPair>
 #include <QString>
 #include <QList>
+#include <QTime>
 
 class Statistic
 {
@@ -20,7 +21,9 @@ public:
 private:
     void load(unsigned int number);
     QMap<QString, QPair<unsigned int, unsigned int> >* stats;//first=successes, second=mistakes
+    QMap<QString, QList<unsigned int> >* timeStats;
     QList<QPair<QString, float> >* sorted;//sorted by value
+    QTime lastSuccess;
 };
 
 #endif // STATISTIC_H

@@ -227,10 +227,10 @@ void InputField::keyPressEvent(QKeyEvent* e)
             {
                 corrects++;
                 errorstate = false;
-                int prevprevIndex = typedText.length()-2;
-                int prevIndex = typedText.length()-1;
-                int nextnextIndex = typedText.length()+2;
-                int nextIndex = typedText.length()+1;
+                int prevprevIndex = typedText.length()-2-1;
+                int prevIndex = typedText.length()-1-1;
+                int nextnextIndex = typedText.length()+2-1;
+                int nextIndex = typedText.length()+1-1;
                 QChar prevprev('\0');
                 QChar prev('\0');
                 QChar next('\0');
@@ -251,7 +251,7 @@ void InputField::keyPressEvent(QKeyEvent* e)
                 {
                     next = displayText.at(nextIndex);
                 }
-                stats->reportSuccess(prevprev, prev, displayText.at(typedText.length()), next, nextnext);
+                stats->reportSuccess(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
                 QTextCursor cursor(textCursor());
                 QTextCharFormat format;
                 format.setBackground(QBrush(QColor("white")));
@@ -303,10 +303,10 @@ void InputField::keyPressEvent(QKeyEvent* e)
                 {
                     mistakes++;
                     errorstate = true;
-                    int prevprevIndex = typedText.length()-2;
-                    int prevIndex = typedText.length()-1;
-                    int nextnextIndex = typedText.length()+2;
-                    int nextIndex = typedText.length()+1;
+                    int prevprevIndex = typedText.length()-2-1;
+                    int prevIndex = typedText.length()-1-1;
+                    int nextnextIndex = typedText.length()+2-1;
+                    int nextIndex = typedText.length()+1-1;
                     QChar prevprev('\0');
                     QChar prev('\0');
                     QChar next('\0');
@@ -327,7 +327,7 @@ void InputField::keyPressEvent(QKeyEvent* e)
                     {
                         next = displayText.at(nextIndex);
                     }
-                    stats->reportMistake(prevprev, prev, displayText.at(typedText.length()), next, nextnext);
+                    stats->reportMistake(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
                 }
                 if (!this->settings->value("blockOnError").toBool())
                 {
