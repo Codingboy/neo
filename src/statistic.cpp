@@ -232,7 +232,7 @@ void Statistic::setUsedWords(QList<QString>* words)
                 float successes = this->stats->value(keys.at(j)).first;
                 float mistakes = this->stats->value(keys.at(j)).second;
                 float balance = mistakes / (mistakes + successes);
-                actualBalance += balance*actualWord.count(keys.at(j));
+                actualBalance += balance*actualWord.count(keys.at(j))*10;
             }
         }
         for (int j=0; j<timeKeys.size(); j++)
