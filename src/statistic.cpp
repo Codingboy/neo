@@ -194,7 +194,7 @@ void Statistic::save(unsigned int number, unsigned int corrects, unsigned int mi
 /**
  * @return (0;1), most values will be near 0 if pow > 1
  */
-float expRand()
+float Statistic::expRand()
 {
     float x = qrand();
 #ifdef __linux__
@@ -204,7 +204,12 @@ float expRand()
     x /= 32768-1;
 #endif
     QSettings s("settings.ini", QSettings::IniFormat);
-    float ret = pow(x, s.value("pow").toFloat());
+    float randomValue = s.value("pow").toFloat();
+    if (this->sorted->empty())
+    {
+        randomValue = 1.0;
+    }
+    float ret = pow(x, randomValue);
     if (ret < 0)
     {
         ret = 0;
@@ -266,12 +271,6 @@ void Statistic::setUsedWords(QList<QString>* words)
         }
     }
 #if 1
-#if 0
-    for (int i=0; i<keys.size(); i++)
-    {
-        qDebug() << keys.at(i) << this->stats->value(keys.at(i)).first << this->stats->value(keys.at(i)).second;
-    }
-#endif
     for (int i=0; i<this->sorted->size(); i++)
     {
         qDebug() << this->sorted->at(i).first << this->sorted->at(i).second;

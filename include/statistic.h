@@ -19,6 +19,7 @@ public:
     void setUsedWords(QList<QString>* words);
     void load();
 private:
+    float expRand();
     void load(unsigned int number);
     QMap<QString, QPair<unsigned int, unsigned int> >* stats;//first=successes, second=mistakes
     QMap<QString, QList<unsigned int> >* timeStats;
