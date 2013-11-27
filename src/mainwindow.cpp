@@ -123,6 +123,6 @@ void MainWindow::resetSettings()
     s.setValue("badLineE", 3);
     s.setValue("pow", 2);
     s.setValue("visualErrorFeedback", true);
-    s.setValue("influencingSessions", 10);
+    s.setValue("influencingSessions", 5);
     qDebug() << "settings resetted";
 }

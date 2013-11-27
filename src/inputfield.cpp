@@ -98,7 +98,7 @@ InputField::InputField(QObject *parent) :
     }
     if (!this->settings->contains("influencingSessions"))
     {
-        this->settings->setValue("influencingSessions", 10);
+        this->settings->setValue("influencingSessions", 5);
     }
     qDebug() << "generated missing settings";
     this->fontSize = this->settings->value("fontSize").toInt();
