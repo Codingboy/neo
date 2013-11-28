@@ -165,12 +165,12 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>91</width>
+     <width>111</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>hits per minute</string>
+    <string>Anschläge/Minute</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -183,7 +183,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>mistakes per 100 hits</string>
+    <string>Fehlerrate</string>
    </property>
   </widget>
  </widget>

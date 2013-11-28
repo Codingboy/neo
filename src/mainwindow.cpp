@@ -14,12 +14,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QMenu* file = this->ui->menuBar->addMenu("&File");
-    QAction* quit = new QAction("&Quit", this);
+    QMenu* file = this->ui->menuBar->addMenu("&Datei");
+    QAction* quit = new QAction("&Schließen", this);
     file->addAction(quit);
-    QAction* abort = new QAction("&Abort", this);
+    QAction* abort = new QAction("&Abbrechen", this);
     file->addAction(abort);
-    QMenu* lesson = this->ui->menuBar->addMenu("&Lesson");
+    QMenu* lesson = this->ui->menuBar->addMenu("&Übung");
     QList<QAction*> lessons;
     QDir dir("wp");
     dir.setFilter(QDir::Files);
@@ -33,18 +33,18 @@ MainWindow::MainWindow(QWidget *parent) :
         lesson->addAction(action);
         qDebug() << "added lesson" << files.at(i);
     }
-    QMenu* statistic = this->ui->menuBar->addMenu("&Statistic");
-    QAction* show = new QAction("&Show", this);
+    QMenu* statistic = this->ui->menuBar->addMenu("&Statistik");
+    QAction* show = new QAction("&Anzeigen", this);
     statistic->addAction(show);
-    QAction* reset = new QAction("&Reset", this);
+    QAction* reset = new QAction("&Zurücksetzen", this);
     statistic->addAction(reset);
-    QMenu* settingsMenu = this->ui->menuBar->addMenu("&Settings");
-    QAction* settingsAction = new QAction("&Edit", this);
+    QMenu* settingsMenu = this->ui->menuBar->addMenu("&Einstellungen");
+    QAction* settingsAction = new QAction("&Ändern", this);
     settingsMenu->addAction(settingsAction);
-    QAction* resetSettingsAction = new QAction("&Reset", this);
+    QAction* resetSettingsAction = new QAction("&Zurücksetzen", this);
     settingsMenu->addAction(resetSettingsAction);
-    QMenu* aboutMenu = this->ui->menuBar->addMenu("&About");
-    QAction* aboutAction = new QAction("&About", this);
+    QMenu* aboutMenu = this->ui->menuBar->addMenu("&Über");
+    QAction* aboutAction = new QAction("&Über", this);
     aboutMenu->addAction(aboutAction);
     this->stats = new Statistic();
     ui->type->preinit(this->ui->display, stats, 300, this, ui->keyboard, ui->timeLeft, ui->hits, ui->mistakes, ui->hitsPerMinute, ui->mistakesper100);
@@ -65,7 +65,7 @@ void MainWindow::showSettings()
 {
     QFrame* f = new QFrame();
     SettingsWidget* w = new SettingsWidget(f);
-    f->setWindowTitle("Settings");
+    f->setWindowTitle("Einstellungen");
     f->setMinimumSize(w->size());
     f->show();
 }
@@ -74,7 +74,7 @@ void MainWindow::openStatistic()
 {
     QFrame* f = new QFrame();
     StatisticWidget* w = new StatisticWidget(f);
-    f->setWindowTitle("Statistic");
+    f->setWindowTitle("Statistik");
     f->setMinimumSize(w->size());
     f->show();
 }
@@ -82,8 +82,8 @@ void MainWindow::openStatistic()
 void MainWindow::resetStatistic()
 {
     QMessageBox msgBox;
-    msgBox.setWindowTitle("Reset Statistic");
-    msgBox.setText("Do you really want to reset the complete statistic?");
+    msgBox.setWindowTitle("Statistik zurücksetzen");
+    msgBox.setText("Möchten Sie wirklich die gesamte Statistik zurücksetzen?");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
     if(msgBox.exec() == QMessageBox::Yes)
@@ -103,7 +103,7 @@ void MainWindow::resetStatistic()
 
 void MainWindow::showAbout()
 {
-    QMessageBox::about(this, "About", "Author:\tDaniel Tkocz\nContact:\tdaniel.tkocz@gmx.de\nLicense:\tBSD 2-Clause\n\ninspired by:\n\thttps://online.tipp10.com\n\thttp://neo-layout.org");
+    QMessageBox::about(this, "About", "Autor:\tDaniel Tkocz\nKontakt:\tdaniel.tkocz@gmx.de\nLizenz:\tBSD 2-Clause\n\ninspiriert von:\n\thttps://online.tipp10.com\n\thttp://neo-layout.org");
 }
 
 MainWindow::~MainWindow()

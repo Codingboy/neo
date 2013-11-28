@@ -1,6 +1,19 @@
-This is a simple tipptrainer designed to learn the neo keyboard layout.
-Each session is five minutes long.
-The tipptrainer detects bigram errors.
-Each session the tipptrainer evaluates the user made errors and gives the user more words, where most errors occured.
-(Implementationinfo: To each word is a errorvalue assigned, words are ordered in an array and sorted for errorvalue, a randomnumber (0;1) is powed 2 times multiplied with itself and the result multiplied with arraysize-1 to access a word with a high errorvalue but also other words)
+Dies ist ein simpler Tipptrainer für das NEOv2 Tastaturlayout.
 
+Jede Übung dauert 5 Minuten. Nach jeder Übung werden die Daten analysiert und gespeichert. Dadurch können dem Nutzer hauptsächlich Wörter zum tippen gegeben werden, die dieser noch nicht so schnell/fehlerfrei tippen kann. Die Analyse ist unabhängig von Wörtern und bindet sich an Monogramme, Bigramme und Trigramme.
+Jede Übung muss vollständig beendet werden, um ausgewertet zu werden. Die gemachten Fehler haben keine Einflüsse auf die aktuelle Übung. Ältere Statistiken "vergisst" das Programm nach einer Weile (5 Übungen, einstellbar).
+Eigene Übungen können in dem Ordner wp abgelegt werden.
+Format:
+* Pro Zeile ein Wort oder Satz
+* Datei endet mit einem Zeilenumbruch
+* Datei hat Endung .wp
+* Datei darf nur Wörter oder nur Sätze enthalten
+
+#TODO
+* Pause
+* Timer zum Updaten/Beenden
+* getRandomLine()
+* höhere Ebenen
+* (andere Layouts?)
+* Freitext.wp
+* scrollen

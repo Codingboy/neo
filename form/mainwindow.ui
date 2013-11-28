@@ -84,35 +84,35 @@
      <item>
       <widget class="QLabel" name="hits">
        <property name="text">
-        <string>0 hits</string>
+        <string>0 Richtige</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="mistakes">
        <property name="text">
-        <string>0 mistakes</string>
+        <string>0 Fehler</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="hitsPerMinute">
        <property name="text">
-        <string>0 hits/minute</string>
+        <string>0 Anschläge/Minute</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="mistakesper100">
        <property name="text">
-        <string>0 mistakes/100</string>
+        <string>0 % Fehlerrate</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="timeLeft">
        <property name="text">
-        <string>300 seconds</string>
+        <string>300 Sekunden</string>
        </property>
       </widget>
      </item>
