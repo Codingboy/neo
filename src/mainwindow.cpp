@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction* aboutAction = new QAction("&Über", this);
     aboutMenu->addAction(aboutAction);
     this->stats = new Statistic();
-    ui->type->preinit(this->ui->display, stats, 300, this, ui->keyboard, ui->timeLeft, ui->hits, ui->mistakes, ui->hitsPerMinute, ui->mistakesper100);
+    ui->type->preinit(this->ui->display, stats, this, ui->keyboard, ui->timeLeft, ui->hits, ui->mistakes, ui->hitsPerMinute, ui->mistakesper100);
     connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(show, SIGNAL(triggered()), this, SLOT(openStatistic()));
     connect(reset, SIGNAL(triggered()), this, SLOT(resetStatistic()));
@@ -124,5 +124,7 @@ void MainWindow::resetSettings()
     s.setValue("pow", 2);
     s.setValue("visualErrorFeedback", true);
     s.setValue("influencingSessions", 5);
+    s.setValue("sessionDuration", 300);
+    s.setValue("timeout", 3000);
     qDebug() << "settings resetted";
 }

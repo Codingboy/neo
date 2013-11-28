@@ -28,11 +28,13 @@ InputField::~InputField()
     {
         delete this->words;
     }
+    delete this->timeoutTimer;
+    delete this->sessionTimer;
+    delete this->guiUpdateTimer;
 }
 
 InputField::InputField(QObject *parent) :
     QTextEdit((QWidget*)parent),
-    startTime(QTime::currentTime()),
     neo1(QString("graphics")+QDir::separator()+QString("neo1.png")),
     neo2(QString("graphics")+QDir::separator()+QString("neo2.png")),
     neo3(QString("graphics")+QDir::separator()+QString("neo3.png")),
@@ -100,10 +102,70 @@ InputField::InputField(QObject *parent) :
     {
         this->settings->setValue("influencingSessions", 5);
     }
+    if (!this->settings->contains("sessionDuration"))
+    {
+        this->settings->setValue("sessionDuration", 300);
+    }
+    if (!this->settings->contains("timeout"))
+    {
+        this->settings->setValue("timeout", 3000);
+    }
     qDebug() << "generated missing settings";
     this->fontSize = this->settings->value("fontSize").toInt();
-    sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));
-    started = false;
+    this->sound = new QSound(QString("sounds")+QDir::separator()+QString("err.wav"));
+    this->timeoutTimer = new QTimer();
+    this->guiUpdateTimer = new QTimer();
+    this->sessionTimer = new QTimer();
+    connect(this->timeoutTimer, SIGNAL(timeout()), this, SLOT(handleTimeout()));
+    connect(this->guiUpdateTimer, SIGNAL(timeout()), this, SLOT(handleGuiUpdate()));
+    connect(this->sessionTimer, SIGNAL(timeout()), this, SLOT(handleSessionEnd()));
+}
+
+void InputField::handleTimeout()
+{
+    this->timeout = true;
+    this->sessionTimer->stop();
+}
+
+void InputField::handleGuiUpdate()
+{
+    if (!this->timeout)
+    {
+        this->secondsSinceStart++;
+    }
+    this->timeLeftLabel->setText(QString::number(this->settings->value("sessionDuration").toInt()-this->secondsSinceStart, 10)+" Sekunden");
+    this->hitsLabel->setText(QString::number(corrects, 10)+" Richtige");
+    this->mistakesLabel->setText(QString::number(mistakes, 10)+" Fehler");
+    if (this->secondsSinceStart == 0)
+    {
+        this->hitsPerMinuteLabel->setText("0 Anschläge/Minute");
+    }
+    else
+    {
+        this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/((float)this->secondsSinceStart/60)), 10)+" Anschläge/Minute");
+    }
+    if (corrects == 0)
+    {
+        this->mistakesRateLabel->setText("0 % Fehlerrate");
+    }
+    else
+    {
+        this->mistakesRateLabel->setText(QString::number((double)mistakes*100/corrects)+" % Fehlerrate");
+    }
+    this->guiUpdateTimer->setInterval(1000);
+    this->guiUpdateTimer->setSingleShot(true);
+    this->guiUpdateTimer->start();
+}
+
+void InputField::handleSessionEnd()
+{
+    int statsCounter = this->settings->value("statsCounter").toInt();
+    this->stats->save(statsCounter, corrects, mistakes, this->lesson);
+    statsCounter++;
+    this->settings->setValue("statsCounter", QVariant(statsCounter));
+    setReadOnly(true);
+    clear();
+    display->clear();
 }
 
 Wordpool* InputField::loadWordpool(QString& lesson)
@@ -133,11 +195,10 @@ Wordpool* InputField::loadWordpool(QString& lesson)
     return wp;
 }
 
-void InputField::preinit(QTextEdit* display, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard, QLabel* timeLeftLabel, QLabel* hitsLabel, QLabel* mistakesLabel, QLabel* hitsPerMinuteLabel, QLabel* mistakesRateLabel)
+void InputField::preinit(QTextEdit* display, Statistic* stats, QMainWindow* mw, QLabel* keyboard, QLabel* timeLeftLabel, QLabel* hitsLabel, QLabel* mistakesLabel, QLabel* hitsPerMinuteLabel, QLabel* mistakesRateLabel)
 {
     this->display = display;
     this->stats = stats;
-    this->time = time;
     this->mw = mw;
     this->keyboard = keyboard;
     this->keyboard->setPixmap(neo1);
@@ -159,12 +220,12 @@ void InputField::init()
     QAction* action = (QAction*)QObject::sender();
     this->lesson = action->iconText();
     this->words = loadWordpool(this->lesson);
-    this->startTime = QTime::currentTime();
     display->clear();
     clear();
     setReadOnly(false);
     showText();
-    this->started = false;
+    this->timeout = false;
+    this->firstKeyPress = true;
 }
 
 void InputField::keyReleaseEvent(QKeyEvent *e)
@@ -190,11 +251,32 @@ void InputField::keyReleaseEvent(QKeyEvent *e)
 
 void InputField::keyPressEvent(QKeyEvent* e)
 {
-    if (!this->started)
+    if (this->firstKeyPress)
     {
-        this->startTime = QTime::currentTime();
-        this->started = true;
+        this->timeoutTimer->setInterval(this->settings->value("timeout").toInt());
+        this->timeoutTimer->setSingleShot(true);
+        this->timeoutTimer->start();
+        this->guiUpdateTimer->setInterval(1000);
+        this->guiUpdateTimer->setSingleShot(true);
+        this->guiUpdateTimer->start();
+        this->sessionTimer->setInterval(this->settings->value("sessionDuration").toInt()*1000);
+        this->sessionTimer->setSingleShot(true);
+        this->sessionTimer->start();
+        this->secondsSinceStart = 0;
+        this->firstKeyPress = false;
+        return;
     }
+    if (this->timeout)
+    {
+        this->sessionTimer->start();
+    }
+    else
+    {
+        this->timeoutTimer->stop();
+    }
+    this->timeoutTimer->setInterval(this->settings->value("timeout").toInt());
+    this->timeoutTimer->setSingleShot(true);
+    this->timeoutTimer->start();
     if (e->key() == Qt::Key_Shift)
     {
         keyboard->setPixmap(neo2);
@@ -251,7 +333,10 @@ void InputField::keyPressEvent(QKeyEvent* e)
                 {
                     next = displayText.at(nextIndex);
                 }
-                stats->reportSuccess(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
+                if (!this->timeout)
+                {
+                    stats->reportSuccess(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
+                }
                 QTextCursor cursor(textCursor());
                 QTextCharFormat format;
                 format.setBackground(QBrush(QColor("white")));
@@ -327,7 +412,10 @@ void InputField::keyPressEvent(QKeyEvent* e)
                     {
                         next = displayText.at(nextIndex);
                     }
-                    stats->reportMistake(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
+                    if (!this->timeout)
+                    {
+                        stats->reportMistake(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
+                    }
                 }
                 if (!this->settings->value("blockOnError").toBool())
                 {
@@ -342,27 +430,7 @@ void InputField::keyPressEvent(QKeyEvent* e)
             }
         }
     }
-    QTime t = this->startTime.addSecs(this->time);
-    int s = QTime::currentTime().secsTo(t);
-    if (s < 0)
-    {
-        s = 0;
-    }
-    this->timeLeftLabel->setText(QString::number(s, 10)+" Sekunden");
-    this->hitsLabel->setText(QString::number(corrects, 10)+" Richtige");
-    this->mistakesLabel->setText(QString::number(mistakes, 10)+" Fehler");
-    this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/(((double)QTime::currentTime().secsTo(this->startTime)*(-1))/60)), 10)+" Anschläge/Minute");
-    this->mistakesRateLabel->setText(QString::number((double)mistakes*100/corrects)+" % Fehlerrate");
-    if (t <= QTime::currentTime())
-    {
-        int statsCounter = this->settings->value("statsCounter").toInt();
-        this->stats->save(statsCounter, corrects, mistakes, this->lesson);
-        statsCounter++;
-        this->settings->setValue("statsCounter", QVariant(statsCounter));
-        setReadOnly(true);
-        clear();
-        display->clear();
-    }
+    this->timeout = false;
 }
 
 void InputField::abort()

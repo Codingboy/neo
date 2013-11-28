@@ -10,8 +10,6 @@ Format:
 * Datei darf nur Wörter oder nur Sätze enthalten
 
 #TODO
-* Pause
-* Timer zum Updaten/Beenden
 * getRandomLine()
 * höhere Ebenen
 * (andere Layouts?)

@@ -18,6 +18,7 @@ public:
     const QString& getRecommendedWord();
     void setUsedWords(QList<QString>* words);
     void load();
+    void timeout();
 private:
     float expRand();
     void load(unsigned int number);
@@ -25,6 +26,7 @@ private:
     QMap<QString, QList<unsigned int> >* timeStats;
     QList<QPair<QString, float> >* sorted;//sorted by value
     QTime lastSuccess;
+    bool timeoutOccured;
 };
 
 #endif // STATISTIC_H

@@ -19,6 +19,7 @@ Statistic::Statistic()
     qsrand(QTime::currentTime().msec());
     this->lastSuccess = QTime::currentTime();
     this->lastSuccess.start();
+    this->timeoutOccured = true;
 }
 
 Statistic::~Statistic()
@@ -278,6 +279,7 @@ void Statistic::setUsedWords(QList<QString>* words)
 #endif
     this->stats->clear();
     this->timeStats->clear();
+    this->timeoutOccured = true;
 }
 
 const QString& Statistic::getRecommendedWord()
@@ -286,10 +288,14 @@ const QString& Statistic::getRecommendedWord()
     return this->sorted->at(index).first;
 }
 
+void Statistic::timeout()
+{
+    this->timeoutOccured = true;
+}
+
 void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext)
 {
-    QTime timeout = this->lastSuccess.addSecs(5);
-    if (timeout > QTime::currentTime())
+    if (!this->timeoutOccured)
     {
         QList<unsigned int> l = this->timeStats->value(actual);
         l.append(this->lastSuccess.elapsed());
@@ -303,7 +309,7 @@ void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QC
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prev)+QString(actual));
         p2.first++;
         this->stats->insert(QString(prev)+QString(actual), p2);
-        if (timeout > QTime::currentTime())
+        if (!this->timeoutOccured)
         {
             QList<unsigned int> l = this->timeStats->value(QString(prev)+QString(actual));
             l.append(this->lastSuccess.elapsed());
@@ -315,8 +321,7 @@ void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QC
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(actual)+QString(next));
         p2.first++;
         this->stats->insert(QString(actual)+QString(next), p2);
-        QTime timeout = this->lastSuccess.addSecs(5);
-        if (timeout > QTime::currentTime())
+        if (!this->timeoutOccured)
         {
             QList<unsigned int> l = this->timeStats->value(QString(actual)+QString(next));
             l.append(this->lastSuccess.elapsed());
@@ -328,8 +333,7 @@ void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QC
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prevprev)+QString(prev)+QString(actual));
         p2.first++;
         this->stats->insert(QString(prevprev)+QString(prev)+QString(actual), p2);
-        QTime timeout = this->lastSuccess.addSecs(5);
-        if (timeout > QTime::currentTime())
+        if (!this->timeoutOccured)
         {
             QList<unsigned int> l = this->timeStats->value(QString(prevprev)+QString(prev)+QString(actual));
             l.append(this->lastSuccess.elapsed());
@@ -341,8 +345,7 @@ void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QC
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(prev)+QString(actual)+QString(next));
         p2.first++;
         this->stats->insert(QString(prev)+QString(actual)+QString(next), p2);
-        QTime timeout = this->lastSuccess.addSecs(5);
-        if (timeout > QTime::currentTime())
+        if (!this->timeoutOccured)
         {
             QList<unsigned int> l = this->timeStats->value(QString(prev)+QString(actual)+QString(next));
             l.append(this->lastSuccess.elapsed());
@@ -354,8 +357,7 @@ void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QC
         QPair<unsigned int, unsigned int> p2 = this->stats->value(QString(actual)+QString(next)+QString(nextnext));
         p2.first++;
         this->stats->insert(QString(actual)+QString(next)+QString(nextnext), p2);
-        QTime timeout = this->lastSuccess.addSecs(5);
-        if (timeout > QTime::currentTime())
+        if (!this->timeoutOccured)
         {
             QList<unsigned int> l = this->timeStats->value(QString(actual)+QString(next)+QString(nextnext));
             l.append(this->lastSuccess.elapsed());
@@ -363,6 +365,7 @@ void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QC
         }
     }
     this->lastSuccess.restart();
+    this->timeoutOccured = false;
 }
 
 void Statistic::reportMistake(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext)

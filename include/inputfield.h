@@ -11,6 +11,7 @@
 #include <QSound>
 #include <QProcess>
 #include <QLabel>
+#include <QTimer>
 
 class InputField : public QTextEdit
 {
@@ -18,7 +19,7 @@ class InputField : public QTextEdit
 public:
     explicit InputField(QObject *parent = 0);
     ~InputField();
-    void preinit(QTextEdit* display, Statistic* stats, unsigned int time, QMainWindow* mw, QLabel* keyboard, QLabel* timeLeftLabel, QLabel* hitsLabel, QLabel* mistakesLabel, QLabel* hitsPerMinuteLabel, QLabel* mistakesRateLabel);
+    void preinit(QTextEdit* display, Statistic* stats, QMainWindow* mw, QLabel* keyboard, QLabel* timeLeftLabel, QLabel* hitsLabel, QLabel* mistakesLabel, QLabel* hitsPerMinuteLabel, QLabel* mistakesRateLabel);
     unsigned int mistakes;
     unsigned int corrects;
 protected:
@@ -29,8 +30,6 @@ protected:
     Wordpool* words;
     bool errorstate;
     Statistic* stats;
-    unsigned int time;
-    QTime startTime;
     QMainWindow* mw;
     QPixmap neo1;
     QPixmap neo2;
@@ -49,11 +48,19 @@ protected:
     QLabel* mistakesLabel;
     QLabel* hitsPerMinuteLabel;
     QLabel* mistakesRateLabel;
-    bool started;
-    
+    QTimer* timeoutTimer;
+    QTimer* guiUpdateTimer;
+    QTimer* sessionTimer;
+    bool timeout;
+    unsigned int secondsSinceStart;
+    bool firstKeyPress;
+
 signals:
     
 public slots:
+    void handleTimeout();
+    void handleSessionEnd();
+    void handleGuiUpdate();
     void abort();
     void init();
     
