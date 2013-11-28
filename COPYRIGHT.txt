@@ -4,6 +4,6 @@ This work is licensed under the BSD 2-Clause License. To view this license, open
 I do not own copyright of some files:
 Sounds are from http://www.soundjay.com.
 Keyboard layout images are from http://neo-layout.org. Licensed under cc-by-sa.
-Wordlists are from https://online.tipp10.com.
-neo20.exe is from http://neo-layout.org. Licensed under gpl.
+Wordlists are from https://online.tipp10.com. Licensed under GPL 2.0.
+neo20.exe is from http://neo-layout.org. Licensed under GPL.
 All .dll's are from http://qt-project.org.
