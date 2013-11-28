@@ -125,6 +125,7 @@ void InputField::handleTimeout()
 {
     this->timeout = true;
     this->sessionTimer->stop();
+    this->stats->timeout();
 }
 
 void InputField::handleGuiUpdate()
