@@ -351,7 +351,7 @@ void InputField::keyPressEvent(QKeyEvent* e)
     this->timeLeftLabel->setText(QString::number(s, 10)+" Sekunden");
     this->hitsLabel->setText(QString::number(corrects, 10)+" Richtige");
     this->mistakesLabel->setText(QString::number(mistakes, 10)+" Fehler");
-    this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/(((double)QTime::currentTime().secsTo(this->startTime)*(-1))/60)), 10)+" AnschlÃ¤ge/Minute");
+    this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/(((double)QTime::currentTime().secsTo(this->startTime)*(-1))/60)), 10)+" Anschläge/Minute");
     this->mistakesRateLabel->setText(QString::number((double)mistakes*100/corrects)+" % Fehlerrate");
     if (t <= QTime::currentTime())
     {
