@@ -31,6 +31,7 @@ InputField::~InputField()
     delete this->timeoutTimer;
     delete this->sessionTimer;
     delete this->guiUpdateTimer;
+    delete this->elapsed;
 }
 
 InputField::InputField(QObject *parent) :
