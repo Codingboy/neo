@@ -4,10 +4,11 @@ Jede Übung dauert 5 Minuten. Nach jeder Übung werden die Daten analysiert und 
 Jede Übung muss vollständig beendet werden, um ausgewertet zu werden. Die gemachten Fehler haben keine Einflüsse auf die aktuelle Übung. Ältere Statistiken "vergisst" das Programm nach einer Weile (5 Übungen, einstellbar).
 Eigene Übungen können in dem Ordner wp abgelegt werden.
 Format:
-* Pro Zeile ein Wort oder Satz
+* pro Zeile ein Wort oder Satz
 * Datei endet mit einem Zeilenumbruch
 * Datei hat Endung .wp
-* Datei darf nur Wörter oder nur Sätze enthalten
+* Datei darf nur Wörter oder (exklusives oder) nur Sätze enthalten
+* kurze Sätze sind empfohlen
 
 #TODO
 * getRandomLine()

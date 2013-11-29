@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>236</width>
-    <height>301</height>
+    <height>361</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>215</width>
-     <height>262</height>
+     <width>219</width>
+     <height>321</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -173,13 +173,47 @@
     <item row="9" column="1">
      <widget class="QSpinBox" name="influencingSessions"/>
     </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Übunsdauer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QSpinBox" name="sessionDuration">
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>Timeout</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1">
+     <widget class="QSpinBox" name="timeout">
+      <property name="minimum">
+       <number>1000</number>
+      </property>
+      <property name="maximum">
+       <number>10000</number>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>270</y>
+     <y>330</y>
      <width>211</width>
      <height>31</height>
     </rect>

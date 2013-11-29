@@ -27,6 +27,8 @@ SettingsWidget::SettingsWidget(QWidget *parent) :
     this->ui->goodLineE->setValue(this->settings->value("goodLineE").toFloat());
     this->ui->badLineE->setValue(this->settings->value("badLineE").toFloat());
     this->ui->influencingSessions->setValue(this->settings->value("influencingSessions").toInt());
+    this->ui->timeout->setValue(this->settings->value("timeout").toInt());
+    this->ui->sessionDuration->setValue(this->settings->value("sessionDuration").toInt()/60);
     connect(this->ui->ok, SIGNAL(clicked()), this, SLOT(ok()));
     connect(this->ui->cancel, SIGNAL(clicked()), this, SLOT(cancel()));
     connect(this->ui->goodLineA, SIGNAL(valueChanged(int)), this, SLOT(adjustBadLineA()));
@@ -85,6 +87,8 @@ void SettingsWidget::ok()
     this->settings->setValue("goodLineE", this->ui->goodLineE->value());
     this->settings->setValue("badLineE", this->ui->badLineE->value());
     this->settings->setValue("influencingSessions", this->ui->influencingSessions->value());
+    this->settings->setValue("sessionDuration", this->ui->sessionDuration->value()*60);
+    this->settings->setValue("timeout", this->ui->timeout->value());
     ((QFrame*)(this->parent()))->close();
     qDebug() << "saved settings";
 }
