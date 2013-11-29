@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>NEOTippTrainer</string>
+   <string>NEO TT</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="InputField" name="type" native="true">
@@ -50,6 +50,15 @@
       <width>1677215</width>
       <height>1677215</height>
      </size>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOn</enum>
+    </property>
+    <property name="lineWrapMode">
+     <enum>QTextEdit::NoWrap</enum>
     </property>
     <property name="readOnly">
      <bool>true</bool>

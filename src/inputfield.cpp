@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QTimer>
 #include <QAction>
+#include <QScrollBar>
 
 InputField::~InputField()
 {
@@ -121,6 +122,13 @@ InputField::InputField(QObject *parent) :
     connect(this->timeoutTimer, SIGNAL(timeout()), this, SLOT(handleTimeout()));
     connect(this->guiUpdateTimer, SIGNAL(timeout()), this, SLOT(handleGuiUpdate()));
     connect(this->sessionTimer, SIGNAL(timeout()), this, SLOT(handleSessionEnd()));
+    connect(this, SIGNAL(correctTextTyped()), this, SLOT(scrollDisplay()));
+    //connect(this, SIGNAL(scrollDisplay2(int)), this->display->horizontalScrollBar(), SLOT(setValue(int)));
+}
+
+void InputField::scrollDisplay()
+{
+    emit scrollDisplay2((int)(((float)this->correctTextLength/this->display->toPlainText().split("\n").at(0).length())*this->display->horizontalScrollBar()->maximum()));
 }
 
 void InputField::handleTimeout()
@@ -234,6 +242,7 @@ void InputField::init()
     showText();
     this->timeout = false;
     this->firstKeyPress = true;
+    this->correctTextLength = 0;
 }
 
 void InputField::keyReleaseEvent(QKeyEvent *e)
@@ -347,6 +356,8 @@ void InputField::keyPressEvent(QKeyEvent* e)
                 if (!this->timeout)
                 {
                     stats->reportSuccess(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
+                    this->correctTextLength = typedText.length();
+                    emit correctTextTyped();
                 }
                 QTextCursor cursor(textCursor());
                 QTextCharFormat format;

@@ -56,8 +56,11 @@ protected:
     bool firstKeyPress;
     int timeUntilEnd;
     QElapsedTimer* elapsed;
+    int correctTextLength;
 
 signals:
+    void correctTextTyped();
+    void scrollDisplay2(int);
     
 public slots:
     void handleTimeout();
@@ -65,7 +68,7 @@ public slots:
     void handleGuiUpdate();
     void abort();
     void init();
-    
+    void scrollDisplay();
 };
 
 #endif // INPUTFIELD_H
