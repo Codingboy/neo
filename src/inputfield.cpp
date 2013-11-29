@@ -116,6 +116,7 @@ InputField::InputField(QObject *parent) :
     this->timeoutTimer = new QTimer();
     this->guiUpdateTimer = new QTimer();
     this->sessionTimer = new QTimer();
+    this->elapsed = new QElapsedTimer();
     connect(this->timeoutTimer, SIGNAL(timeout()), this, SLOT(handleTimeout()));
     connect(this->guiUpdateTimer, SIGNAL(timeout()), this, SLOT(handleGuiUpdate()));
     connect(this->sessionTimer, SIGNAL(timeout()), this, SLOT(handleSessionEnd()));
@@ -126,24 +127,27 @@ void InputField::handleTimeout()
     this->timeout = true;
     this->sessionTimer->stop();
     this->stats->timeout();
+    this->timeUntilEnd -= this->elapsed->elapsed();
+    this->elapsed->restart();
 }
 
 void InputField::handleGuiUpdate()
 {
     if (!this->timeout)
     {
-        this->secondsSinceStart++;
+        this->timeUntilEnd -= this->elapsed->elapsed();
+        this->elapsed->restart();
     }
-    this->timeLeftLabel->setText(QString::number(this->settings->value("sessionDuration").toInt()-this->secondsSinceStart, 10)+" Sekunden");
+    this->timeLeftLabel->setText(QString::number(this->timeUntilEnd/1000, 10)+" Sekunden");
     this->hitsLabel->setText(QString::number(corrects, 10)+" Richtige");
     this->mistakesLabel->setText(QString::number(mistakes, 10)+" Fehler");
-    if (this->secondsSinceStart == 0)
+    if (this->sessionTimer->interval()-this->timeUntilEnd == 0)
     {
         this->hitsPerMinuteLabel->setText("0 Anschläge/Minute");
     }
     else
     {
-        this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/((float)this->secondsSinceStart/60)), 10)+" Anschläge/Minute");
+        this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/((float)(this->sessionTimer->interval()-this->timeUntilEnd)/60)), 10)+" Anschläge/Minute");
     }
     if (corrects == 0)
     {
@@ -167,6 +171,8 @@ void InputField::handleSessionEnd()
     setReadOnly(true);
     clear();
     display->clear();
+    this->timeoutTimer->stop();
+    this->guiUpdateTimer->stop();
 }
 
 Wordpool* InputField::loadWordpool(QString& lesson)
@@ -263,13 +269,16 @@ void InputField::keyPressEvent(QKeyEvent* e)
         this->sessionTimer->setInterval(this->settings->value("sessionDuration").toInt()*1000);
         this->sessionTimer->setSingleShot(true);
         this->sessionTimer->start();
-        this->secondsSinceStart = 0;
         this->firstKeyPress = false;
+        this->timeUntilEnd = this->settings->value("sessionDuration").toInt()*1000;
+        this->elapsed->start();
         return;
     }
     if (this->timeout)
     {
-        this->sessionTimer->start();
+        this->sessionTimer->start(this->timeUntilEnd);
+        this->elapsed->restart();
+        qDebug() << this->timeUntilEnd;
     }
     else
     {

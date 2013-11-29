@@ -12,6 +12,7 @@
 #include <QProcess>
 #include <QLabel>
 #include <QTimer>
+#include <QElapsedTimer>
 
 class InputField : public QTextEdit
 {
@@ -52,8 +53,9 @@ protected:
     QTimer* guiUpdateTimer;
     QTimer* sessionTimer;
     bool timeout;
-    unsigned int secondsSinceStart;
     bool firstKeyPress;
+    int timeUntilEnd;
+    QElapsedTimer* elapsed;
 
 signals:
     
