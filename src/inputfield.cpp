@@ -155,7 +155,7 @@ void InputField::handleGuiUpdate()
     }
     else
     {
-        this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/((float)(this->sessionTimer->interval()-this->timeUntilEnd)/60)), 10)+" Anschläge/Minute");
+        this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/((float)(this->sessionTimer->interval()/1000-this->timeUntilEnd/1000)/60)), 10)+" Anschläge/Minute");
     }
     if (corrects == 0)
     {
