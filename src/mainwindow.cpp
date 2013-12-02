@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(showSettings()));
     connect(resetSettingsAction, SIGNAL(triggered()), this, SLOT(resetSettings()));
     connect(abort, SIGNAL(triggered()), this->ui->type, SLOT(abort()));
+    //connect(ui->type, SIGNAL(scrollDisplay2(int)), ui->display->horizontalScrollBar(), SLOT(setValue()));
     for (int i=0; i<files.size(); i++)
     {
         connect(lessons.at(i), SIGNAL(triggered()), ui->type, SLOT(init()));

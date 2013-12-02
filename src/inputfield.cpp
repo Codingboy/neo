@@ -123,7 +123,6 @@ InputField::InputField(QObject *parent) :
     connect(this->guiUpdateTimer, SIGNAL(timeout()), this, SLOT(handleGuiUpdate()));
     connect(this->sessionTimer, SIGNAL(timeout()), this, SLOT(handleSessionEnd()));
     connect(this, SIGNAL(correctTextTyped()), this, SLOT(scrollDisplay()));
-    //connect(this, SIGNAL(scrollDisplay2(int)), this->display->horizontalScrollBar(), SLOT(setValue(int)));
 }
 
 void InputField::scrollDisplay()
@@ -224,6 +223,7 @@ void InputField::preinit(QTextEdit* display, Statistic* stats, QMainWindow* mw, 
     this->hitsPerMinuteLabel = hitsPerMinuteLabel;
     this->mistakesRateLabel = mistakesRateLabel;
     setReadOnly(true);
+    connect(this, SIGNAL(scrollDisplay2(int)), this->display->horizontalScrollBar(), SLOT(setValue(int)));
 }
 
 void InputField::init()
@@ -268,6 +268,7 @@ void InputField::keyReleaseEvent(QKeyEvent *e)
 
 void InputField::keyPressEvent(QKeyEvent* e)
 {
+    bool emitter = false;
     if (this->firstKeyPress)
     {
         this->timeoutTimer->setInterval(this->settings->value("timeout").toInt());
@@ -353,12 +354,9 @@ void InputField::keyPressEvent(QKeyEvent* e)
                 {
                     next = displayText.at(nextIndex);
                 }
-                if (!this->timeout)
-                {
-                    stats->reportSuccess(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
-                    this->correctTextLength = typedText.length();
-                    emit correctTextTyped();
-                }
+                stats->reportSuccess(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
+                this->correctTextLength = typedText.length();
+                emitter = true;
                 QTextCursor cursor(textCursor());
                 QTextCharFormat format;
                 format.setBackground(QBrush(QColor("white")));
@@ -394,6 +392,8 @@ void InputField::keyPressEvent(QKeyEvent* e)
                 if (e->key() == Qt::Key_Return)
                 {
                     showText();
+                    this->correctTextLength = 0;
+                    emitter = true;
                 }
             }
             else
@@ -434,10 +434,7 @@ void InputField::keyPressEvent(QKeyEvent* e)
                     {
                         next = displayText.at(nextIndex);
                     }
-                    if (!this->timeout)
-                    {
-                        stats->reportMistake(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
-                    }
+                    stats->reportMistake(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
                 }
                 if (!this->settings->value("blockOnError").toBool())
                 {
@@ -453,6 +450,10 @@ void InputField::keyPressEvent(QKeyEvent* e)
         }
     }
     this->timeout = false;
+    if (emitter)
+    {
+        emit correctTextTyped();
+    }
 }
 
 void InputField::abort()
