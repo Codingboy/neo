@@ -149,13 +149,14 @@ void InputField::handleGuiUpdate()
     this->timeLeftLabel->setText(QString::number(this->timeUntilEnd/1000, 10)+" Sekunden");
     this->hitsLabel->setText(QString::number(corrects, 10)+" Richtige");
     this->mistakesLabel->setText(QString::number(mistakes, 10)+" Fehler");
-    if (this->sessionTimer->interval()-this->timeUntilEnd == 0)
+    if (this->settings->value("sessionDuration").toInt()-this->timeUntilEnd/1000 == 0)
     {
         this->hitsPerMinuteLabel->setText("0 Anschläge/Minute");
     }
     else
     {
-        this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/((float)(this->sessionTimer->interval()/1000-this->timeUntilEnd/1000)/60)), 10)+" Anschläge/Minute");
+        qDebug() << corrects << this->settings->value("sessionDuration").toInt() << this->timeUntilEnd/1000;
+        this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/(((float)(this->settings->value("sessionDuration").toInt()-this->timeUntilEnd/1000))/60)), 10)+" Anschläge/Minute");
     }
     if (corrects == 0)
     {
@@ -289,7 +290,6 @@ void InputField::keyPressEvent(QKeyEvent* e)
     {
         this->sessionTimer->start(this->timeUntilEnd);
         this->elapsed->restart();
-        qDebug() << this->timeUntilEnd;
     }
     else
     {
