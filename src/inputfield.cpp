@@ -155,7 +155,6 @@ void InputField::handleGuiUpdate()
     }
     else
     {
-        qDebug() << corrects << this->settings->value("sessionDuration").toInt() << this->timeUntilEnd/1000;
         this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/(((float)(this->settings->value("sessionDuration").toInt()-this->timeUntilEnd/1000))/60)), 10)+" Anschläge/Minute");
     }
     if (corrects == 0)
@@ -466,117 +465,42 @@ void InputField::abort()
 
 void InputField::showText()
 {
-    if (this->display->toPlainText().length() == 0)
-    {
-        QTextCursor cursor(this->display->textCursor());
-        QTextCharFormat format;
-        format.setFontWeight(QFont::Normal);
-        format.setFontPointSize(this->fontSize);
-        format.setBackground(QBrush(QColor("lightgrey")));
-        format.setForeground(QBrush(QColor("black")));
-        cursor.setCharFormat(format);
-        QString word = this->words->getRandomWord();
-        cursor.insertText(word.left(1));
+    this->display->clear();
+    QTextCursor cursor(this->display->textCursor());
+    QTextCharFormat format;
+    format.setFontWeight(QFont::Normal);
+    format.setFontPointSize(this->fontSize);
+    format.setBackground(QBrush(QColor("lightgrey")));
+    format.setForeground(QBrush(QColor("black")));
+    cursor.setCharFormat(format);
+    QString word = this->words->getRandomWord();
+    cursor.insertText(word.left(1));
 
-        QTextCursor cursor2(this->display->textCursor());
-        QTextCharFormat format2;
-        format2.setFontWeight(QFont::Normal);
-        format2.setFontPointSize(this->fontSize);
-        format2.setBackground(QBrush(QColor("white")));
-        format2.setForeground(QBrush(QColor("black")));
-        cursor2.setCharFormat(format2);
-        cursor2.insertText(word.right(word.length()-1));
-        if (!word.contains(" "))
-        {
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText("\n");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText("\n");
-        }
-        else
-        {
-            cursor2.insertText("\n");
-            cursor2.insertText(this->words->getRandomWord());
-            cursor2.insertText("\n");
-        }
+    QTextCursor cursor2(this->display->textCursor());
+    QTextCharFormat format2;
+    format2.setFontWeight(QFont::Normal);
+    format2.setFontPointSize(this->fontSize);
+    format2.setBackground(QBrush(QColor("white")));
+    format2.setForeground(QBrush(QColor("black")));
+    cursor2.setCharFormat(format2);
+    cursor2.insertText(word.right(word.length()-1));
+    if (!word.contains(" "))
+    {
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText(" ");
+        cursor2.insertText(this->words->getRandomWord());
+        cursor2.insertText("\n");
     }
     else
     {
-        QString content = this->display->toPlainText();
-        int counter = 0;
-        int n = 1;
-        for (int i=content.length()-1; i>=0; i--)
-        {
-            if (content.at(i) == '\n')
-            {
-                counter++;
-                if (counter == 2)
-                {
-                    break;
-                }
-            }
-            else
-            {
-                n++;
-            }
-        }
-        QString last = content.right(n);
-        this->display->clear();
-        QTextCursor cursor(this->display->textCursor());
-        QTextCharFormat format;
-        format.setFontWeight(QFont::Normal);
-        format.setFontPointSize(this->fontSize);
-        format.setBackground(QBrush(QColor("lightgrey")));
-        format.setForeground(QBrush(QColor("black")));
-        cursor.setCharFormat(format);
-        cursor.insertText(last.left(1));
-        QTextCursor cursor2(this->display->textCursor());
-        QTextCharFormat format2;
-        format2.setFontWeight(QFont::Normal);
-        format2.setFontPointSize(this->fontSize);
-        format2.setBackground(QBrush(QColor("white")));
-        format2.setForeground(QBrush(QColor("black")));
-        cursor2.setCharFormat(format2);
-        cursor2.insertText(last.right(last.length()-1));
-        QString word = words->getRandomWord();
-        cursor2.insertText(word);
-        if (!word.contains(" "))
-        {
-            cursor2.insertText(" ");
-            cursor2.insertText(words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(words->getRandomWord());
-            cursor2.insertText(" ");
-            cursor2.insertText(words->getRandomWord());
-            cursor2.insertText("\n");
-        }
-        else
-        {
-            cursor2.insertText("\n");
-        }
-        clear();
+        cursor2.insertText("\n");
     }
+    clear();
 }
