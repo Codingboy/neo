@@ -59,6 +59,7 @@ InputField::InputField(QObject *parent) :
     corrects = 0;
     mistakes = 0;
     errorstate = false;
+    setLineWrapMode(QTextEdit::NoWrap);
     this->settings = new QSettings("settings.ini", QSettings::IniFormat);
     if (!this->settings->contains("statsCounter"))
     {
