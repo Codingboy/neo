@@ -11,8 +11,5 @@ Format:
 * kurze Sätze sind empfohlen
 
 #TODO
-* getRandomLine()
-* höhere Ebenen
 * (andere Layouts?)
 * Freitext.wp
-* scrollen
