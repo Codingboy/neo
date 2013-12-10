@@ -274,7 +274,7 @@ void Statistic::setUsedWords(QList<QString>* words)
 #if 1
     for (int i=0; i<this->sorted->size(); i++)
     {
-        qDebug() << this->sorted->at(i).first << this->sorted->at(i).second;
+        qDebug() << "DEBUG" << this->sorted->at(i).first << this->sorted->at(i).second;
     }
 #endif
     this->stats->clear();
