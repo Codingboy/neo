@@ -156,7 +156,7 @@ void InputField::handleGuiUpdate()
     }
     else
     {
-        this->hitsPerMinuteLabel->setText(QString::number((int)(corrects/(((float)(this->settings->value("sessionDuration").toInt()-this->timeUntilEnd/1000))/60)), 10)+" Anschläge/Minute");
+        this->hitsPerMinuteLabel->setText(QString::number((int)((corrects+mistakes)/(((float)(this->settings->value("sessionDuration").toInt()-this->timeUntilEnd/1000))/60)), 10)+" Anschläge/Minute");
     }
     if (corrects == 0)
     {
@@ -164,7 +164,7 @@ void InputField::handleGuiUpdate()
     }
     else
     {
-        this->mistakesRateLabel->setText(QString::number((double)mistakes*100/corrects)+" % Fehlerrate");
+        this->mistakesRateLabel->setText(QString::number((double)mistakes*100/(corrects+mistakes))+" % Fehlerrate");
     }
     this->guiUpdateTimer->setInterval(1000);
     this->guiUpdateTimer->setSingleShot(true);
