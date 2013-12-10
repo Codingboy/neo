@@ -153,11 +153,11 @@ void InputField::handleGuiUpdate()
     this->mistakesLabel->setText(QString::number(mistakes, 10)+" Fehler");
     if (this->settings->value("sessionDuration").toInt()-this->timeUntilEnd/1000 == 0)
     {
-        this->hitsPerMinuteLabel->setText("0 Anschläge/Minute");
+        this->hitsPerMinuteLabel->setText("0 Zeichen/Minute");
     }
     else
     {
-        this->hitsPerMinuteLabel->setText(QString::number((int)((corrects+mistakes)/(((float)(this->settings->value("sessionDuration").toInt()-this->timeUntilEnd/1000))/60)), 10)+" Anschläge/Minute");
+        this->hitsPerMinuteLabel->setText(QString::number((int)((corrects+mistakes)/(((float)(this->settings->value("sessionDuration").toInt()-this->timeUntilEnd/1000))/60)), 10)+" Zeichen/Minute");
     }
     if (corrects == 0)
     {
