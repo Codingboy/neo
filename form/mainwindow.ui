@@ -107,7 +107,7 @@
      <item>
       <widget class="QLabel" name="hitsPerMinute">
        <property name="text">
-        <string>0 Anschläge/Minute</string>
+        <string>0 Zeichen/Minute</string>
        </property>
       </widget>
      </item>
