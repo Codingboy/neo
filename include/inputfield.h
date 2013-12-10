@@ -57,6 +57,7 @@ protected:
     int timeUntilEnd;
     QElapsedTimer* elapsed;
     int correctTextLength;
+    bool running;
 
 signals:
     void correctTextTyped();

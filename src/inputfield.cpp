@@ -120,6 +120,7 @@ InputField::InputField(QObject *parent) :
     this->guiUpdateTimer = new QTimer();
     this->sessionTimer = new QTimer();
     this->elapsed = new QElapsedTimer();
+    this->running = false;
     connect(this->timeoutTimer, SIGNAL(timeout()), this, SLOT(handleTimeout()));
     connect(this->guiUpdateTimer, SIGNAL(timeout()), this, SLOT(handleGuiUpdate()));
     connect(this->sessionTimer, SIGNAL(timeout()), this, SLOT(handleSessionEnd()));
@@ -229,6 +230,11 @@ void InputField::preinit(QTextEdit* display, Statistic* stats, QMainWindow* mw, 
 
 void InputField::init()
 {
+    if (this->running)
+    {
+        abort();
+    }
+    this->running = true;
     qDebug() << "starting session";
     mistakes = 0;
     corrects = 0;
@@ -241,9 +247,13 @@ void InputField::init()
     clear();
     setReadOnly(false);
     showText();
-    this->timeout = false;
+    this->timeout = true;
     this->firstKeyPress = true;
     this->correctTextLength = 0;
+    this->timeUntilEnd = this->settings->value("sessionDuration").toInt()*1000;
+    this->guiUpdateTimer->setInterval(1000);
+    this->guiUpdateTimer->setSingleShot(true);
+    this->guiUpdateTimer->start();
 }
 
 void InputField::keyReleaseEvent(QKeyEvent *e)
@@ -275,15 +285,12 @@ void InputField::keyPressEvent(QKeyEvent* e)
         this->timeoutTimer->setInterval(this->settings->value("timeout").toInt());
         this->timeoutTimer->setSingleShot(true);
         this->timeoutTimer->start();
-        this->guiUpdateTimer->setInterval(1000);
-        this->guiUpdateTimer->setSingleShot(true);
-        this->guiUpdateTimer->start();
         this->sessionTimer->setInterval(this->settings->value("sessionDuration").toInt()*1000);
         this->sessionTimer->setSingleShot(true);
         this->sessionTimer->start();
         this->firstKeyPress = false;
-        this->timeUntilEnd = this->settings->value("sessionDuration").toInt()*1000;
         this->elapsed->start();
+        this->timeout = false;
         return;
     }
     if (this->timeout)
@@ -461,6 +468,7 @@ void InputField::abort()
     setReadOnly(true);
     clear();
     this->display->clear();
+    this->running = false;
     qDebug() << "session aborted";
 }
 
