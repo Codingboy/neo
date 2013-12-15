@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+ï»¿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "wordpool.h"
 #include <cstdio>
@@ -15,11 +15,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     QMenu* file = this->ui->menuBar->addMenu("&Datei");
-    QAction* quit = new QAction("&Schließen", this);
+    QAction* quit = new QAction("&SchlieÃŸen", this);
     file->addAction(quit);
     QAction* abort = new QAction("&Abbrechen", this);
     file->addAction(abort);
-    QMenu* lesson = this->ui->menuBar->addMenu("&Übung");
+    QMenu* lesson = this->ui->menuBar->addMenu("&Ãœbung");
     QList<QAction*> lessons;
     QDir dir("wp");
     dir.setFilter(QDir::Files);
@@ -36,15 +36,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QMenu* statistic = this->ui->menuBar->addMenu("&Statistik");
     QAction* show = new QAction("&Anzeigen", this);
     statistic->addAction(show);
-    QAction* reset = new QAction("&Zurücksetzen", this);
+    QAction* reset = new QAction("&ZurÃ¼cksetzen", this);
     statistic->addAction(reset);
     QMenu* settingsMenu = this->ui->menuBar->addMenu("&Einstellungen");
-    QAction* settingsAction = new QAction("&Ändern", this);
+    QAction* settingsAction = new QAction("&Ã„ndern", this);
     settingsMenu->addAction(settingsAction);
-    QAction* resetSettingsAction = new QAction("&Zurücksetzen", this);
+    QAction* resetSettingsAction = new QAction("&ZurÃ¼cksetzen", this);
     settingsMenu->addAction(resetSettingsAction);
-    QMenu* aboutMenu = this->ui->menuBar->addMenu("&Über");
-    QAction* aboutAction = new QAction("&Über", this);
+    QMenu* aboutMenu = this->ui->menuBar->addMenu("&Ãœber");
+    QAction* aboutAction = new QAction("&Ãœber", this);
     aboutMenu->addAction(aboutAction);
     this->stats = new Statistic();
     ui->type->preinit(this->ui->display, stats, this, ui->keyboard, ui->timeLeft, ui->hits, ui->mistakes, ui->hitsPerMinute, ui->mistakesper100);
@@ -82,8 +82,8 @@ void MainWindow::openStatistic()
 void MainWindow::resetStatistic()
 {
     QMessageBox msgBox;
-    msgBox.setWindowTitle("Statistik zurücksetzen");
-    msgBox.setText("Möchten Sie wirklich die gesamte Statistik zurücksetzen?");
+    msgBox.setWindowTitle("Statistik zurÃ¼cksetzen");
+    msgBox.setText("MÃ¶chten Sie wirklich die gesamte Statistik zurÃ¼cksetzen?");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
     if(msgBox.exec() == QMessageBox::Yes)
