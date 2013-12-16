@@ -368,8 +368,11 @@ void Statistic::reportSuccess(const QChar& prevprev, const QChar& prev, const QC
     this->timeoutOccured = false;
 }
 
-void Statistic::reportMistake(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext)
+void Statistic::reportMistake(const QChar& prevprev, const QChar& prev, const QChar& actual, const QChar& next, const QChar& nextnext, const QChar& wrong)
 {
+    QPair<unsigned int, unsigned int> p = this->stats->value(wrong);
+    p.second++;
+    this->stats->insert(wrong, p);
     QPair<unsigned int, unsigned int> p1 = this->stats->value(actual);
     p1.second++;
     this->stats->insert(actual, p1);

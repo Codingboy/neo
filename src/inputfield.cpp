@@ -441,7 +441,8 @@ void InputField::keyPressEvent(QKeyEvent* e)
                     {
                         next = displayText.at(nextIndex);
                     }
-                    stats->reportMistake(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext);
+                    QChar wrong = e->text().at(0);
+                    stats->reportMistake(prevprev, prev, displayText.at(typedText.length()-1), next, nextnext, wrong);
                 }
                 if (!this->settings->value("blockOnError").toBool())
                 {
