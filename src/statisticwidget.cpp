@@ -297,32 +297,32 @@ int mapCharToFinger(char c)
     {
         case 'x':
         case 'u':
-        case 'ü':
+        case 'ÃÂÃÂÃÂÃÂ¼':
         case '1':
         case '2':
-        case '°':
-        case '§':
+        case 'ÃÂÃÂÃÂÃÂ°':
+        case 'ÃÂÃÂÃÂÃÂ§':
         case 'X':
         case 'U':
-        case 'Ü':
+        case 'ÃÂÃÂÃÂÃÂ':
             return 0;
         case '3':
         case 'v':
         case 'i':
-        case 'ö':
-        case 'ℓ':
+        case 'ÃÂÃÂÃÂÃÂ¶':
+        case 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ':
         case 'V':
         case 'I':
-        case 'Ö':
+        case 'ÃÂÃÂÃÂÃÂ':
             return 1;
         case '4':
         case 'l':
         case 'a':
-        case 'ä':
-        case '»':
+        case 'ÃÂÃÂÃÂÃÂ¤':
+        case 'ÃÂÃÂÃÂÃÂ»':
         case 'L':
         case 'A':
-        case 'Ä':
+        case 'ÃÂÃÂÃÂÃÂ':
             return 2;
         case '5':
         case '6':
@@ -332,7 +332,7 @@ int mapCharToFinger(char c)
         case 'w':
         case 'o':
         case 'z':
-        case '«':
+        case 'ÃÂÃÂÃÂÃÂ«':
         case 'C':
         case 'E':
         case 'P':
@@ -349,11 +349,11 @@ int mapCharToFinger(char c)
         case 'n':
         case 'b':
         case 'm':
-        case '„':
+        case 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ':
         case 'K':
         case 'S':
         case 'B':
-        case '€':
+        case 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¬':
         case 'H':
         case 'N':
         case 'M':
@@ -362,23 +362,23 @@ int mapCharToFinger(char c)
         case 'g':
         case 'r':
         case ',':
-        case '“':
+        case 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ':
         case 'G':
         case 'R':
-        case '–':
+        case 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ':
             return 5;
         case '0':
         case 'f':
         case 't':
         case '.':
-        case '”':
+        case 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ':
         case 'F':
         case 'T':
-        case '•':
+        case 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¢':
             return 6;
         case '-':
         case 'q':
-        case 'ß':
+        case 'ÃÂÃÂÃÂÃÂ':
         case 'd':
         case 'y':
         case 'j':
@@ -386,7 +386,7 @@ int mapCharToFinger(char c)
         case 'J':
         case 'Y':
         case 'Q':
-        case '—':
+        case 'ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ':
             return 7;
         case ' ':
             return 8;
