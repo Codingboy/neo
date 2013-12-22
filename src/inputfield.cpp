@@ -201,7 +201,8 @@ Wordpool* InputField::loadWordpool(QString& lesson)
         {
             break;
         }
-        QString str(bytes);
+//        QString str(bytes);
+        QString str = QString::fromUtf8(bytes);
         str.remove("\n");
         str.remove("\r");
         wp->addWord(str);
